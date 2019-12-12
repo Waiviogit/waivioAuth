@@ -1,4 +1,4 @@
-const { chai, chaiHttp, app, sinon, models, dropDatabase, AuthStrategies, ObjectID, crypto, AuthenticationModule, jwt } = require( '../../../testHelper' );
+const { chai, chaiHttp, app, sinon, dropDatabase, AuthStrategies, ObjectID, crypto, AuthenticationModule, jwt } = require( '../../../testHelper' );
 const { UserFactory } = require( '../../../factories/index' );
 
 chai.use( chaiHttp );
@@ -41,13 +41,13 @@ describe( 'Authorization', async () => {
             const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token' } );
 
             result.should.have.status( 200 );
-            expect( result.headers.access_token ).to.be.exist;
+            expect( result.headers['access-token'] ).to.be.exist;
         } );
 
         it( 'check access_token', async () => {
             sinon.stub( AuthStrategies, 'facebookStrategy' ).returns( Promise.resolve( { user, session } ) );
             const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token' } );
-            const token = await AuthenticationModule.TokenSalt.decodeToken( { access_token: result.headers.access_token } );
+            const token = await AuthenticationModule.TokenSalt.decodeToken( { access_token: result.headers['access-token'] } );
             const decoded_token = jwt.decode( token );
 
             expect( decoded_token.name ).to.be.eq( name );

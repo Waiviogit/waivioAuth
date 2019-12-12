@@ -12,16 +12,20 @@ const generateSession = ( ) => {
 };
 
 const setAuthHeaders = ( res, client, session ) => {
-    const access_token = token_sign( client, session );
+    const { access_token, expires_in } = token_sign( client, session );
 
-    res.setHeader( 'access_token', encodeToken( { access_token } ) );
+    res.setHeader( 'access-token', encodeToken( { access_token } ) );
+    res.setHeader( 'expires_in', expires_in );
+    res.setHeader( 'waivio-auth', true );
 };
 
 const token_sign = ( self, token_hash ) => {
-    return jwt.sign(
+    const access_token = jwt.sign(
         { name: self.name, id: self._id, sid: token_hash.sid },
         token_hash.secret_token,
         { expiresIn: config.session_expiration } );
+
+    return { access_token, expires_in: jwt.decode( access_token ).exp };
 };
 
 module.exports = { setAuthHeaders, generateSession, decodeToken };
