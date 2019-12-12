@@ -5,7 +5,7 @@
  */
 
 let app = require( '../app' );
-let debug = require( 'debug' )( 'waivio-admin-api:server' );
+let debug = require( 'debug' )( 'waivio-auth:server' );
 let http = require( 'http' );
 
 /**

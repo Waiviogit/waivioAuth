@@ -10,10 +10,10 @@ const notFound = ( res, data ) => {
     return res.status( 404 ).json( data );
 };
 
-const unauthorized = ( res ) => {
+const unauthorized = ( res, data ) => {
     return res.status( 401 ).send( {
         success: false,
-        message: 'No token provided.'
+        message: data || 'No token provided.'
     } );
 };
 

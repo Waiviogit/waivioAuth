@@ -1,7 +1,4 @@
 module.exports = {
-    statistics: require( './statisticsValidator' ),
-    wObjects: require( './wObjectsValidator' ),
-    posts: require( './postsValidator' ),
     users: require( './usersValidator' ),
     validate: ( data, schema ) => {
         const result = schema.validate( data, { abortEarly: false } );

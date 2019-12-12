@@ -1,0 +1,42 @@
+{
+  "swagger": "2.0",
+  "host": "waiviodev.com/",
+  "schemes": ["https"],
+  "info": {
+    "version": "0.0.1",
+    "title": "Waivio auth service",
+    "description": "Documentation for waivio auth service"
+  },
+  "basePath": "auth/",
+  "paths": {
+    "/facebook": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "body",
+            "description": "facebook access_token",
+            "type": "string",
+            "required": true
+          }],
+        "responses": {
+          "200": {
+            "description": "User data",
+            "examples": {
+              "data": {"user": "user data" }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+  }
+}

@@ -2,6 +2,17 @@ const mongoose = require( 'mongoose' );
 const Schema = mongoose.Schema;
 const { LANGUAGES } = require( '../../config/constants' );
 
+const UserAuthSchema = new Schema(
+    {
+        id: { type: String },
+        provider: { type: String },
+        sessions: [ {
+            sid: { type: String, required: true },
+            secret_token: { type: String, required: true }
+        } ]
+    }, { _id: false }
+);
+
 const UserMetadataSchema = new Schema( {
     notifications_last_timestamp: { type: Number, default: 0 },
     settings: {
@@ -43,13 +54,7 @@ const UserSchema = new Schema( {
     count_posts: { type: Number, default: 0, index: true }, // count of the all posts
     last_posts_count: { type: Number, default: 0 }, // count of the posts written in last day
     user_metadata: { type: UserMetadataSchema, default: () => ( {} ), select: false },
-    auth: {
-        facebook_id: { type: String, required: true },
-        sessions: [ {
-            sid: { type: String, required: true },
-            secret_token: { type: String, required: true }
-        } ],
-    }
+    auth: { type: UserAuthSchema }
 }, { timestamps: true } );
 
 UserSchema.index( { wobjects_weight: -1 } );

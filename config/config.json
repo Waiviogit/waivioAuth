@@ -27,6 +27,7 @@
       "port": 27017,
       "database": "waiviotest"
     },
+    "limit_sessions": 5,
     "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
     "session_expiration": "2000"
   }

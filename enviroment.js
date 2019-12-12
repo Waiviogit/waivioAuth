@@ -1,14 +1,14 @@
 const logger = require( 'morgan' );
 const cookieParser = require( 'cookie-parser' );
-// const swaggerUi = require( 'swagger-ui-express' );
-// const swaggerDocument = require( './swagger/swagger.json' );
+const swaggerUi = require( 'swagger-ui-express' );
+const swaggerDocument = require( './swagger/swagger.json' );
 
 module.exports = function( app, express ) {
     app.use( cookieParser() );
     app.use( express.json() );
     app.use( logger( 'dev' ) );
     app.use( express.urlencoded( { extended: false } ) );
-    // app.use( '/docs', swaggerUi.serve, swaggerUi.setup( swaggerDocument ) );
+    app.use( '/auth-service/docs', swaggerUi.serve, swaggerUi.setup( swaggerDocument ) );
 
     // error handler
     app.use( ( err, req, res, next ) => {

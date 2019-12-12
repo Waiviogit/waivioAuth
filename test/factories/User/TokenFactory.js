@@ -1,31 +1,23 @@
-const crypto = require( 'crypto' );
+const crypto = require( 'crypto-js' );
 const config = require( '../../../config' );
+const { ObjectID } = require( '../../testHelper' );
 
 const rewire = require( 'rewire' );
-const AuthRewire = rewire( '../../../utilities/authentication/token' );
+const AuthRewire = rewire( '../../../utilities/authentication/sessions' );
 const token_sign = AuthRewire.__get__( 'token_sign' );
 
-const encodeToken = ( data ) => {
-    let cipher = crypto.createCipher( 'aes-256-cbc', config.crypto_key );
-    let crypted = cipher.update( data, 'utf8', 'hex' );
-
-    crypted += cipher.final( 'hex' );
-
-    return crypted;
+const encodeToken = ( { access_token } ) => {
+    return crypto.AES.encrypt( access_token, config.crypto_key ).toString();
 };
 
-const decodeToken = async ( data ) => {
-    let decipher = await crypto.createDecipher( 'aes-256-cbc', config.crypto_key );
-    let decrypted = await decipher.update( data, 'hex', 'utf8' );
-
-    decrypted += decipher.final( 'utf8' );
-    return decrypted;
+const decodeToken = async ( { access_token } ) => {
+    return crypto.AES.decrypt( access_token, config.crypto_key ).toString( crypto.enc.Utf8 );
 };
 
 const create = async ( data = {} ) => {
-    const session = { sid: crypto.randomBytes( 16 ).toString( 'hex' ),
-        secret_token: crypto.randomBytes( 16 ).toString( 'hex' ),
-        ip: data.ip || '::ffff:127.0.0.1'
+    const session = {
+        sid: new ObjectID(),
+        secret_token: crypto.SHA512( `${new Date()}` ).toString()
     };
 
     const auth_token = await token_sign( data.client, session );
@@ -37,4 +29,4 @@ const create = async ( data = {} ) => {
 };
 
 
-module.exports = { create };
+module.exports = { create, decodeToken, encodeToken };

@@ -1,7 +1,7 @@
 module.exports = {
-    Auth: require( './auth' ),
-    encodeDecodeToken: require( './encodeDecodeToken' ),
+    ValidataAuthToken: require( './validateAuthToken' ),
+    TokenSalt: require( './tokenSalt' ),
     Passport: require( './passport' ),
-    Policy: require( './policy' ),
-    Token: require( './token' )
+    Sessions: require( './sessions' ),
+    Auth: require( './auth' )
 };

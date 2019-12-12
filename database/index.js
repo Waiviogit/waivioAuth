@@ -13,6 +13,6 @@ mongoose.Promise = global.Promise;
 module.exports = {
     Mongoose: mongoose,
     models: {
-        userModel: require( './schemas/UserSchema' )
+        User: require( './schemas/UserSchema' )
     }
 };

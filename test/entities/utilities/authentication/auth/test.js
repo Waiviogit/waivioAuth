@@ -1,151 +1,72 @@
-const { sinon, Authentication, expect, mockRequest, mockResponse } = require( '../../../../testHelper' );
-const { adminFactory, tokenFactory } = require( '../../../../factories' );
-const jwt = require( 'jsonwebtoken' );
+const { expect, models, sinon, dropDatabase, AuthenticationModule, ObjectID, crypto } = require( '../../../../testHelper' );
+const { UserFactory } = require( '../../../../factories' );
 
 describe( 'auth', async () => {
 
-    // describe( 'validate_auth_token', async () => {
-    //     let admin;
-    //     let next;
-    //
-    //     beforeEach( async () => {
-    //         admin = await adminFactory.create( { email: 'user@com.ua', password: 'pass' } );
-    //     } );
-    //
-    //     it( 'should return success with all valid params', async () => {
-    //         const { session, auth_token } = await tokenFactory.create( { client: admin } );
-    //
-    //         await admin.set( { sessions: [ session ] } );
-    //         await admin.save();
-    //         const req = mockRequest( { headers: { authorization: auth_token }, connection: { remoteAddress: '::ffff:127.0.0.1' } } );
-    //         const res = mockResponse();
-    //
-    //         next = () => {
-    //             res.status.args[ 0 ] = 200;
-    //         };
-    //
-    //         await Authentication.Auth.validateAuthToken( req, res, next );
-    //
-    //         expect( res.status.args[ 0 ] ).to.be.eql( 200 );
-    //     } );
-    //
-    //     it( 'should return success with expire valid user token', async () => {
-    //         const { session, auth_token } = await tokenFactory.create( { client: admin } );
-    //
-    //         await admin.set( { sessions: [ session ] } );
-    //         await admin.save();
-    //         const req = mockRequest( { headers: { authorization: auth_token }, connection: { remoteAddress: '::ffff:127.0.0.1' } } );
-    //         const res = mockResponse();
-    //
-    //         next = () => {
-    //             res.status.args[ 0 ] = 200;
-    //         };
-    //         await new Promise( ( resolve ) => setTimeout( resolve, 2200 ) );
-    //         await Authentication.Auth.validateAuthToken( req, res, next );
-    //
-    //         expect( res.status.args[ 0 ] ).to.be.eql( 200 );
-    //     } );
-    //
-    //     it( 'should return unauthorize with expire token and invalid ip', async () => {
-    //         const { session, auth_token } = await tokenFactory.create( { client: admin } );
-    //
-    //         await admin.set( { sessions: [ session ] } );
-    //         await admin.save();
-    //         const req = mockRequest( { headers: { authorization: auth_token }, connection: { remoteAddress: '::ffff:127.0.0.2' } } );
-    //         const res = mockResponse();
-    //
-    //         next = () => {
-    //             res.status.args[ 0 ] = 200;
-    //         };
-    //         await new Promise( ( resolve ) => setTimeout( resolve, 2200 ) );
-    //         await Authentication.Auth.validateAuthToken( req, res, next );
-    //
-    //         expect( res.status.args[ 0 ][ 0 ] ).to.be.eq( 401 );
-    //     } );
-    //
-    //     it( 'should return unauthorize with invalid token', async () => {
-    //         const { session } = await tokenFactory.create( { client: admin } );
-    //
-    //         await admin.set( { sessions: [ session ] } );
-    //         await admin.save();
-    //         const req = mockRequest( { headers: { authorization: 'asdasd' }, connection: { remoteAddress: '::ffff:127.0.0.1' } } );
-    //         const res = mockResponse();
-    //
-    //         next = () => {
-    //             res.status.args[ 0 ] = 200;
-    //         };
-    //         await Authentication.Auth.validateAuthToken( req, res, next );
-    //
-    //         expect( res.status.args[ 0 ][ 0 ] ).to.be.eq( 401 );
-    //     } );
-    //
-    //     it( 'should return unauthorize with empty token', async () => {
-    //         const { session } = await tokenFactory.create( { client: admin } );
-    //
-    //         await admin.set( { sessions: [ session ] } );
-    //         await admin.save();
-    //         const req = mockRequest( { headers: { authorization: '' }, connection: { remoteAddress: '::ffff:127.0.0.1' } } );
-    //         const res = mockResponse();
-    //
-    //         next = () => {
-    //             res.status.args[ 0 ] = 200;
-    //         };
-    //         await Authentication.Auth.validateAuthToken( req, res, next );
-    //
-    //         expect( res.status.args[ 0 ][ 0 ] ).to.be.eq( 401 );
-    //     } );
-    //
-    //     it( 'should return unauthorize without token', async () => {
-    //         const { session } = await tokenFactory.create( { client: admin } );
-    //
-    //         await admin.set( { sessions: [ session ] } );
-    //         await admin.save();
-    //         const req = mockRequest( { headers: { }, connection: { remoteAddress: '::ffff:127.0.0.1' } } );
-    //         const res = mockResponse();
-    //
-    //         next = () => {
-    //             res.status.args[ 0 ] = 200;
-    //         };
-    //         await Authentication.Auth.validateAuthToken( req, res, next );
-    //
-    //         expect( res.status.args[ 0 ][ 0 ] ).to.be.eq( 401 );
-    //     } );
-    //
-    //     it( 'should return unauthorize with another token', async () => {
-    //         const another_user = await adminFactory.create( { email: 'user@com.ua', password: 'pass' } );
-    //         const { session } = await tokenFactory.create( { client: admin } );
-    //         const anotherUserSession = await tokenFactory.create( { client: another_user } );
-    //
-    //         await admin.set( { sessions: [ session ] } );
-    //         await admin.save();
-    //         const req = mockRequest( { headers: { authorization: anotherUserSession.auth_token }, connection: { remoteAddress: '::ffff:127.0.0.1' } } );
-    //         const res = mockResponse();
-    //
-    //         next = () => {
-    //             res.status.args[ 0 ] = 200;
-    //         };
-    //         await Authentication.Auth.validateAuthToken( req, res, next );
-    //
-    //         expect( res.status.args[ 0 ][ 0 ] ).to.be.eq( 401 );
-    //     } );
-    //
-    //     it( 'should return unauthorize with jwt decoding error', async () => {
-    //         sinon.stub( jwt, 'verify' ).throws( new Error( 'something bad happened' ) );
-    //         const { session, auth_token } = await tokenFactory.create( { client: admin } );
-    //
-    //         await admin.set( { sessions: [ session ] } );
-    //         await admin.save();
-    //         const req = mockRequest( { headers: { authorization: auth_token }, connection: { remoteAddress: '::ffff:127.0.0.1' } } );
-    //         const res = mockResponse();
-    //
-    //         next = () => {
-    //             res.status.args[ 0 ] = 200;
-    //         };
-    //         await Authentication.Auth.validateAuthToken( req, res, next );
-    //
-    //         expect( res.status.args[ 0 ][ 0 ] ).to.be.eq( 401 );
-    //     } );
-    //
-    // } );
+    describe( 'socialAuth', async () => {
+        let name, avatar_url, provider, id, next, new_session;
+
+        beforeEach( async () => {
+            await dropDatabase();
+            id = new ObjectID().toString();
+            name = 'name';
+            provider = 'facebook';
+            avatar_url = 'image_url';
+            next = async ( error, user, session ) => {
+                return { user, session, error };
+            };
+            new_session = {
+                sid: new ObjectID(),
+                secret_token: crypto.SHA512( `${new Date()}` ).toString()
+            };
+        } );
+
+        it( 'should created with not exist user with avatar', async () => {
+            const { user, session } = await AuthenticationModule.Auth.socialAuth( { name, provider, avatar_url, id, next } );
+
+            expect( user.auth.sessions.length ).to.be.eq( 1 );
+            expect( user.json_metadata ).to.be.eq( JSON.stringify( { profile: { profile_image: 'image_url' } } ) );
+            expect( user.auth.provider ).to.be.eq( provider );
+            expect( user.auth.sessions[ 0 ].sid ).to.be.eql( session.sid.toString() );
+            expect( user.auth.sessions[ 0 ].secret_token ).to.be.eq( session.secret_token );
+            expect( user.alias ).to.be.eq( name );
+            expect( user.name ).to.be.eq( `${provider}|${id}` );
+        } );
+
+        it( 'should created with not exist user without avatar', async () => {
+            const { user, session } = await AuthenticationModule.Auth.socialAuth( { name, provider, avatar_url: null, id, next } );
+
+            expect( user.auth.sessions.length ).to.be.eq( 1 );
+            expect( user.json_metadata ).to.be.eq( JSON.stringify( { profile: { profile_image: null } } ) );
+            expect( user.auth.provider ).to.be.eq( provider );
+            expect( user.auth.sessions[ 0 ].sid ).to.be.eql( session.sid.toString() );
+            expect( user.auth.sessions[ 0 ].secret_token ).to.be.eq( session.secret_token );
+            expect( user.alias ).to.be.eq( name );
+            expect( user.name ).to.be.eq( `${provider}|${id}` );
+        } );
+
+        it( 'should created with exist user without avatar', async () => {
+            await UserFactory.create( { name: `${provider}|${id}`, alias: name, auth: { id: id, provider: 'facebook', sessions: [ new_session ] } } );
+            const { user, session } = await AuthenticationModule.Auth.socialAuth( { name, provider, avatar_url, id, next } );
+            const users = await models.User.find();
+
+            expect( users.length ).to.be.eq( 1 );
+            expect( user.auth.sessions.length ).to.be.eq( 2 );
+            expect( user.json_metadata ).to.be.eq( JSON.stringify( { profile: { profile_image: 'image_url' } } ) );
+            expect( user.auth.provider ).to.be.eq( provider );
+            expect( user.auth.sessions[ 1 ].sid ).to.be.eql( session.sid.toString() );
+            expect( user.auth.sessions[ 1 ].secret_token ).to.be.eq( session.secret_token );
+            expect( user.alias ).to.be.eq( name );
+            expect( user.name ).to.be.eq( `${provider}|${id}` );
+        } );
+
+        it( 'should return error', async () => {
+            sinon.stub( models.User, 'findOne' ).throws( Error( 'Some error' ) );
+            const { error } = await AuthenticationModule.Auth.socialAuth( { name, provider, avatar_url, id, next } );
+
+            expect( error ).to.be.exist;
+        } );
+
+    } );
 
 } );
