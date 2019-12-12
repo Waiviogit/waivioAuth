@@ -5,7 +5,9 @@ module.exports = {
             script: './bin/service.js',
             env: {
                 COMMON_VARIABLE: 'true',
-                PORT: '8004'
+                PORT: '8004',
+                FACEBOOK_APP_ID: '754038848413420',
+                FACEBOOK_APP_SECRET: '6d0255aa0abd3f68bce0ba4314e16dbd'
             }
         }
     ],
