@@ -7,7 +7,8 @@
     },
     "limit_sessions": 5,
     "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
-    "session_expiration": "10m"
+    "session_expiration": "10m",
+    "waivioUrl": "https://www.waivio.com/"
   },
 
   "staging" : {
@@ -18,7 +19,8 @@
     },
     "limit_sessions": 5,
     "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
-    "session_expiration": "10m"
+    "session_expiration": "10m",
+    "waivioUrl": "https://waiviodev.com/"
   },
 
   "development": {
@@ -29,7 +31,8 @@
     },
     "limit_sessions": 5,
     "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
-    "session_expiration": "10m"
+    "session_expiration": "10m",
+    "waivioUrl": "https://waiviodev.com/"
   },
 
   "test": {
@@ -40,6 +43,7 @@
     },
     "limit_sessions": 5,
     "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
-    "session_expiration": "2000"
+    "session_expiration": "2000",
+    "waivioUrl": "https://waiviodev.com/"
   }
 }

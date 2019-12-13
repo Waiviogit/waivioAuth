@@ -11,6 +11,7 @@ const { Mongoose } = require( '../database' );
 const { models } = require( '../database' );
 const { UserModel } = require( '../models' );
 const AuthenticationModule = require( '../utilities/authentication' );
+const { OperationsHelper } = require( '../utilities/helpers' );
 const AuthStrategies = require( '../controllers/authStrategies' );
 const { mockRequest, mockResponse } = require( 'mock-req-res' );
 const api_prefix = '/waivio-auth';
@@ -35,6 +36,7 @@ module.exports = {
     AuthStrategies,
     models,
     UserModel,
+    OperationsHelper,
     Mongoose,
     dropDatabase,
     api_prefix,

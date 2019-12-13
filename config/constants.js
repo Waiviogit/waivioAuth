@@ -1,3 +1,5 @@
+const config = require( './index' );
+
 exports.LANGUAGES = [ 'en-US',
     'id-ID',
     'ms-MY',
@@ -40,3 +42,15 @@ exports.LANGUAGES = [ 'en-US',
     'zh-CN',
     'auto'
 ];
+
+exports.actionUrls = {
+    custom_json: { url: `${config.waivioUrl}objects-bot/guest-custom-json`, type: 'post' },
+    comment: { url: `${config.waivioUrl}objects-bot/guest-create-comment`, type: 'post' },
+    api: { url: `${config.waivioUrl}objects-bot/guest-create-comment`, type: 'put' }
+};
+
+exports.guestActions = {
+    custom_json: [ 'follow', 'followWObject', 'vote' ],
+    comment: [ 'post', 'comment' ],
+    api: [ 'updateMetadata' ]
+};
