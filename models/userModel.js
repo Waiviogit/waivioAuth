@@ -26,7 +26,7 @@ const findOrCreateSocial = async( { query, session, metadata } ) => {
             $push: { 'auth.sessions': session }
         },
         { new: true, upsert: true, runValidators: true, setDefaultsOnInsert: true }
-    );
+    ).lean();
 };
 
 const getUserMetadata = ( { user } ) => {

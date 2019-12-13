@@ -53,5 +53,12 @@ describe( 'Authorization', async () => {
             expect( decoded_token.name ).to.be.eq( name );
             expect( decoded_token.sid ).to.be.eq( session.sid.toString() );
         } );
+
+        it( 'check auth in view', async () => {
+            sinon.stub( AuthStrategies, 'facebookStrategy' ).returns( Promise.resolve( { user: user.toObject(), session } ) );
+            const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token' } );
+
+            expect( result.body.user.auth ).to.be.undefined;
+        } );
     } );
 } );
