@@ -12,7 +12,8 @@ const facebookSignIn = async ( req, res, next ) => {
     return render.success( res, signInView( { user } ) );
 };
 
-const validateAuthToken = async( req, res, next ) => {
+const validateAuthToken = async( req, res ) => {
+    if( req.auth.error ) return render.unauthorized( res, req.auth.error );
     setAuthHeaders( res, req.auth.user, req.auth.session );
     return render.success( res, validateAuthTokenView( { user: req.auth.user } ) );
 };

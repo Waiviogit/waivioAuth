@@ -6,24 +6,53 @@ const { generateSession } = require( './sessions' );
 const { decodeToken } = require( './tokenSalt' );
 const { destroySession } = require( '../../models/userModel' );
 
+const verifyAuthToken = async ( req, res, next ) => {
+    let session;
+    const { payload, decoded_token } = await getAuthData( { req } );
+
+    if ( !payload || !decoded_token ) return next( unauthorizedError( req ) );
+
+    await User.findById( payload.id ).lean().then(
+        async ( doc ) => {
+            session = findSession( { sessions: doc.auth.sessions, sid: payload.sid } );
+            if( session ) {
+                try{
+                    jwt.verify( decoded_token, session.secret_token );
+                    req.auth = { user: doc, session: session };
+                    return next();
+                } catch( error ) {
+                    return render.unauthorized( res, error );
+                }
+            }
+            await destroySession( { user_id: doc._id, session: payload } );
+            return render.unauthorized( res );
+        } );
+};
+
 const validateAuthToken = async ( req, res, next ) => {
     let session;
-    const access_token = req.headers[ 'access-token' ];
+    const { payload, decoded_token } = await getAuthData( { req } );
 
-    if( !access_token ) return unauthorizedError( res );
-    const decoded_token = await decodeToken( { access_token } );
-    const payload = await jwt.decode( decoded_token );
+    if ( !payload || !decoded_token ) return next( unauthorizedError( req ) );
 
-    if( !payload || !payload.id ) return unauthorizedError( res );
-
-    await User.findById( payload.id ).then(
+    await User.findById( payload.id ).lean().then(
         async ( doc ) => {
             session = findSession( { sessions: doc.auth.sessions, sid: payload.sid } );
             if( session ) next( await verifySession( { decoded_token, jwt, session, doc, req, res } ) );
             else await destroySession( { user_id: doc._id, session: payload } );
-            return unauthorizedError( res );
+            return next( unauthorizedError( req ) );
         } );
+};
 
+const getAuthData = async ( { req } ) => {
+    const access_token = req.headers[ 'access-token' ];
+
+    if( !access_token ) return;
+    const decoded_token = await decodeToken( { access_token } );
+    const payload = await jwt.decode( decoded_token );
+
+    if( !payload || !payload.id || !decoded_token ) return;
+    return { payload, decoded_token };
 };
 
 const findSession = ( { sessions, sid } ) => {
@@ -47,14 +76,15 @@ const refreshSession = async ( { req, doc, old_session } ) => {
     const new_session = generateSession( );
 
     await destroySession( { user_id: doc._id, session: old_session } );
-    await User.findOneAndUpdate( { _id: doc.id }, { $push: { sessions: new_session } } );
+    await User.updateOne( { _id: doc.id }, { $push: { sessions: new_session } } );
     req.auth = { user: doc, session: new_session };
 };
 
-const unauthorizedError = ( res ) => {
-    return render.unauthorized( res );
+const unauthorizedError = ( req ) => {
+    req.auth = { error: 'Invalid credentials or token' };
 };
 
 module.exports = {
-    validateAuthToken
+    validateAuthToken,
+    verifyAuthToken
 };

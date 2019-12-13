@@ -4,7 +4,7 @@ const _ = require( 'lodash' );
 
 const destroyLastSession = async ( { user } ) => {
     if( _.get( user, 'auth.sessions', false ) && user.auth.sessions.length >= config.limit_sessions ) {
-        await User.updateOne( { _id: user.id }, { $pull: { 'auth.sessions': { _id: user.auth.sessions[ 0 ].id } } } );
+        await User.updateOne( { _id: user._id }, { $pull: { 'auth.sessions': { _id: user.auth.sessions[ 0 ]._id } } } );
     }
 };
 

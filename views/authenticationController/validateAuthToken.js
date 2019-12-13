@@ -1,5 +1,7 @@
+const _ = require( 'lodash' );
+
 module.exports = function( data ) {
     return {
-        data
+        user: _.omit( data.user, [ 'auth' ] )
     };
 };
