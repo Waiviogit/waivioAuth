@@ -15,7 +15,7 @@ const setAuthHeaders = ( res, client, session ) => {
     const { access_token, expires_in } = token_sign( client, session );
 
     res.setHeader( 'access-token', encodeToken( { access_token } ) );
-    res.setHeader( 'expires_in', expires_in );
+    res.setHeader( 'expires-in', expires_in );
     res.setHeader( 'waivio-auth', true );
 };
 
