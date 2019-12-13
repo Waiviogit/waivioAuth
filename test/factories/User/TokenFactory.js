@@ -4,7 +4,7 @@ const { ObjectID } = require( '../../testHelper' );
 
 const rewire = require( 'rewire' );
 const AuthRewire = rewire( '../../../utilities/authentication/sessions' );
-const token_sign = AuthRewire.__get__( 'token_sign' );
+const tokenSign = AuthRewire.__get__( 'tokenSign' );
 
 const encodeToken = ( { access_token } ) => {
     return crypto.AES.encrypt( access_token, config.crypto_key ).toString();
@@ -20,7 +20,7 @@ const create = async ( data = {} ) => {
         secret_token: crypto.SHA512( `${new Date()}` ).toString()
     };
 
-    const auth_token = await token_sign( data.client, session );
+    const auth_token = await tokenSign( data.client, session );
 
     return {
         session: session,

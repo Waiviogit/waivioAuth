@@ -35,6 +35,34 @@
           }
         }
       }
+    },
+    "/validate_auth_token": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "produces": [ "application/json" ],
+        "description": "Send access-token in headers. If token expired and valid, a new access token will respond. Auth headers are: 'access-token, expires-in, waivio-auth",
+        "parameters": [
+          {
+            "name": "access-token",
+            "in": "headers",
+            "description": "user access_token",
+            "type": "string",
+            "required": true
+          }],
+        "responses": {
+          "200": {
+            "description": "User data with auth headers",
+            "examples": {
+              "data": {"user": "user data" }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
     }
   },
   "definitions": {

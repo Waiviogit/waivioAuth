@@ -21,6 +21,10 @@ describe( 'auth', async () => {
             };
         } );
 
+        afterEach( () => {
+            sinon.restore();
+        } );
+
         it( 'should created with not exist user with avatar', async () => {
             const { user, session } = await AuthenticationModule.Auth.socialAuth( { name, provider, avatar_url, id, next } );
 

@@ -5,7 +5,7 @@ const { generateSession } = require( './sessions' );
 exports.socialAuth = async( { name, provider, avatar_url, id, next } ) => {
     let findUser;
 
-    try{
+    try {
         findUser = await User.findOne( { alias: name } );
     } catch( error ) {
         return next( error );

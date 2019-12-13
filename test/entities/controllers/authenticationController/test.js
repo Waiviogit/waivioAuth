@@ -1,5 +1,5 @@
 const { chai, chaiHttp, app, sinon, dropDatabase, AuthStrategies, ObjectID, crypto, AuthenticationModule, jwt } = require( '../../../testHelper' );
-const { UserFactory } = require( '../../../factories/index' );
+const { UserFactory, TokenFactory } = require( '../../../factories/index' );
 
 chai.use( chaiHttp );
 chai.should();
@@ -34,6 +34,14 @@ describe( 'Authorization', async () => {
             const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token' } );
 
             result.should.have.status( 401 );
+            expect( result.headers[ 'access-token' ] ).to.be.undefined;
+        } );
+
+        it( 'should not authorize without token', async () => {
+            const result = await chai.request( app ).post( '/auth/facebook' ).send( { } );
+
+            result.should.have.status( 401 );
+            expect( result.headers[ 'access-token' ] ).to.be.undefined;
         } );
 
         it( 'should authorize with valid token', async () => {
@@ -41,13 +49,13 @@ describe( 'Authorization', async () => {
             const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token' } );
 
             result.should.have.status( 200 );
-            expect( result.headers['access-token'] ).to.be.exist;
+            expect( result.headers[ 'access-token' ] ).to.be.exist;
         } );
 
         it( 'check access_token', async () => {
             sinon.stub( AuthStrategies, 'facebookStrategy' ).returns( Promise.resolve( { user, session } ) );
             const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token' } );
-            const token = await AuthenticationModule.TokenSalt.decodeToken( { access_token: result.headers['access-token'] } );
+            const token = await AuthenticationModule.TokenSalt.decodeToken( { access_token: result.headers[ 'access-token' ] } );
             const decoded_token = jwt.decode( token );
 
             expect( decoded_token.name ).to.be.eq( name );
@@ -59,6 +67,55 @@ describe( 'Authorization', async () => {
             const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token' } );
 
             expect( result.body.user.auth ).to.be.undefined;
+        } );
+    } );
+    describe( 'validate auth token', async () => {
+        let user, session, access_token;
+
+        beforeEach( async () => {
+            await dropDatabase();
+            user = await UserFactory.create( { email: 'user@com.ua', password: 'pass' } );
+            const tokenData = await TokenFactory.create( { client: user } );
+
+            session = tokenData.session;
+            access_token = tokenData.auth_token;
+            await user.set( { auth: { sessions: [ session ] } } );
+            await user.save();
+        } );
+
+        afterEach( () => {
+            sinon.restore();
+        } );
+        it( 'should return success with valid token', async () => {
+            const result = await chai.request( app ).post( '/auth/validate_auth_token' )
+                .set( { 'access-token': access_token } );
+
+            result.should.have.status( 200 );
+            expect( result.headers[ 'access-token' ] ).to.be.exist;
+        } );
+
+        it( 'should return success with expired token', async () => {
+            await new Promise( ( resolve ) => setTimeout( resolve, 2200 ) );
+            const result = await chai.request( app ).post( '/auth/validate_auth_token' )
+                .set( { 'access-token': access_token } );
+
+            result.should.have.status( 200 );
+            expect( result.headers[ 'access-token' ] ).to.be.exist;
+        } );
+
+        it( 'should return unauthorize with invalid token', async () => {
+            const result = await chai.request( app ).post( '/auth/validate_auth_token' )
+                .set( { 'access-token': 'aa' } );
+
+            result.should.have.status( 401 );
+            expect( result.headers[ 'access-token' ] ).to.be.undefined;
+        } );
+
+        it( 'should return unauthorize without token', async () => {
+            const result = await chai.request( app ).post( '/auth/validate_auth_token' );
+
+            result.should.have.status( 401 );
+            expect( result.headers[ 'access-token' ] ).to.be.undefined;
         } );
     } );
 } );
