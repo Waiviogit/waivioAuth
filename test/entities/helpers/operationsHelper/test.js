@@ -1,23 +1,42 @@
-const { expect, models, dropDatabase, UserModel, ObjectID, crypto } = require( '../../../testHelper' );
-const { UserFactory } = require( '../../../factories' );
+const { expect, dropDatabase } = require( '../../../testHelper' );
 
 const rewire = require( 'rewire' );
 const OperationsHelper = rewire( '../../../../utilities/helpers/operationsHelper' );
-const getRoute = OperationsHelper.__get__( 'getRoute' );
+const getRequestData = OperationsHelper.__get__( 'getRequestData' );
 
 describe( 'operations helper', async () => {
-    describe( 'getRoute', async () => {
+    describe( 'getRequestData', async () => {
         let actionType;
 
-        beforeEach( async() => {
+        it( 'get post action url', async() => {
+            actionType = 'waivio_guest_comment';
+            const { url, type } = getRequestData( { actionType } );
 
+            expect( type ).to.be.eq( 'post' );
+            expect( url ).to.be.eq( 'https://test.waiviodev.com/objects-bot/guest-create-comment' );
         } );
 
-        it( 'get post action url', async() => {
-            actionType = 'post';
-            const result = getRoute( { actionType } );
+        it( 'get custom_json action url', async() => {
+            actionType = 'waivio_guest_vote';
+            const { url, type } = getRequestData( { actionType } );
 
-            expect( result ).to.be.eq( 1 );
+            expect( type ).to.be.eq( 'post' );
+            expect( url ).to.be.eq( 'https://test.waiviodev.com/objects-bot/guest-custom-json' );
+        } );
+
+        it( 'get api action url', async() => {
+            actionType = 'waivio_guest_update';
+            const { url, type } = getRequestData( { actionType, userName: 'userName' } );
+
+            expect( type ).to.be.eq( 'put' );
+            expect( url ).to.be.eq( 'https://test.waiviodev.com/api/userName/userMetadata' );
+        } );
+
+        it( 'should not get action url with invalid type', async() => {
+            actionType = 'aaa';
+            const result = getRequestData( { actionType } );
+
+            expect( result ).to.be.undefined;
         } );
     } );
 } );

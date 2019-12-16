@@ -1,3 +1,7 @@
+const custom = ( res, status, data ) => {
+    return res.status( status ).json( data );
+};
+
 const error = function ( res, error ) {
     return res.status( 422 ).json( { success: false, error: error } );
 };
@@ -18,6 +22,7 @@ const unauthorized = ( res, data ) => {
 };
 
 module.exports = {
+    custom,
     success,
     notFound,
     error,

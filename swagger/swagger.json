@@ -63,6 +63,57 @@
           }
         }
       }
+    },
+    "/guest_operations": {
+      "post": {
+        "tags": [
+          "Operation"
+        ],
+        "produces": [ "application/json" ],
+        "description": "Transport to waivio services guest actions",
+        "parameters": [
+          {
+            "name": "access-token",
+            "in": "headers",
+            "description": "user access_token",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "body",
+            "description": "action type key",
+            "type": "string",
+            "example": "waivio_guest_follow",
+            "required": true
+          },
+          {
+            "name": "data",
+            "in": "body",
+            "description": "data of request",
+            "type": "string",
+            "example": {"data":{"some_key":"some_value"}},
+            "required": true
+          },
+          {
+            "name": "userName",
+            "in": "body",
+            "description": "user name",
+            "type": "string",
+            "required": false
+          }],
+        "responses": {
+          "any_status": {
+            "description": "Any data from services",
+            "examples": {
+              "data": {"user": "user data" }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
     }
   },
   "definitions": {

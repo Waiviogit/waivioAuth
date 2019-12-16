@@ -1,14 +1,18 @@
-const { } = require( '../views/operation' );
+const validators = require( './validators' );
+const { OperationsHelper } = require( '../utilities/helpers' );
 const render = require( '../concerns/render' );
 
-const operationSwitcher = async ( req, res, next ) => {
-    const { path, session, error } = await Operations.( req, res, next );
+const transportAction = async ( req, res ) => {
+    const { params, validation_error } = validators.validate( req.body, validators.operations.transportShcema );
+
+    if ( validation_error ) return render.error( res, validation_error );
+    const { status, json, error } = await OperationsHelper.transportAction( { params } );
 
     if( error ) return render.unauthorized( res, error );
 
-    return render.success( res, signInView( { user } ) );
+    return render.custom( res, status, json );
 };
 
 module.exports = {
-    operationSwitcher
+    transportAction
 };

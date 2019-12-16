@@ -1,3 +1,4 @@
 module.exports = {
-    AuthenticationController: require( './authenticationController' )
+    AuthenticationController: require( './authenticationController' ),
+    OperationsController: require( './operationController' )
 };

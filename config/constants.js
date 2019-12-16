@@ -46,11 +46,11 @@ exports.LANGUAGES = [ 'en-US',
 exports.actionUrls = {
     custom_json: { url: `${config.waivioUrl}objects-bot/guest-custom-json`, type: 'post' },
     comment: { url: `${config.waivioUrl}objects-bot/guest-create-comment`, type: 'post' },
-    api: { url: `${config.waivioUrl}objects-bot/guest-create-comment`, type: 'put' }
+    api: { url: `${config.waivioUrl}api/:user_name/userMetadata`, type: 'put' }
 };
 
 exports.guestActions = {
-    custom_json: [ 'follow', 'followWObject', 'vote' ],
-    comment: [ 'post', 'comment' ],
-    api: [ 'updateMetadata' ]
+    custom_json: [ 'waivio_guest_follow', 'waivio_guest_follow_wobject', 'waivio_guest_vote' ],
+    comment: [ 'waivio_guest_comment' ],
+    api: [ 'waivio_guest_update' ]
 };
