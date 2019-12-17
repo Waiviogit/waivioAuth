@@ -1,4 +1,5 @@
 module.exports = {
     signInView: require( './signIn' ),
-    validateAuthTokenView: require( './validateAuthToken' )
+    validateAuthTokenView: require( './validateAuthToken' ),
+    hasSocialView: require( './hasSocial' )
 };

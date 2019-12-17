@@ -1,22 +1,20 @@
-const { User } = require( '../../database/index' ).models;
-const { destroyLastSession, findOrCreateSocial } = require( '../../models/userModel' );
+const {
+    signUpSocial,
+    signInSocial,
+    findUserBySocial,
+    findUserByName } = require( '../../models/userModel' );
 const { generateSession } = require( './sessions' );
 
-exports.socialAuth = async( { name, provider, avatar_url, id, next } ) => {
-    let findUser;
-
-    try {
-        findUser = await User.findOne( { alias: name } );
-    } catch( error ) {
-        return next( error );
-    }
-    const query = { alias: name, 'auth.provider': provider, 'auth.id': id };
-    const metadata = { profile_image: avatar_url };
-
-    if( !findUser ) query.name = `${provider}|${id}`;
+exports.socialAuth = async( { userName, pickSocialFields, socialName, provider, avatar, id } ) => {
+    const userBySocial = await findUserBySocial( { id, provider } );
     const session = generateSession( );
-    const user = await findOrCreateSocial( { query, session, metadata } );
 
-    await destroyLastSession( { user } );
-    return next( null, user, session );
+    if( !userBySocial && userName ) {
+        const userByName = await findUserByName( { name: userName } );
+
+        if( userByName ) return { error: 'User exist' };
+        return await signUpSocial( { userName, pickFields: !!pickSocialFields, socialName, avatar, provider, id, session } );
+    }
+    if( !userBySocial ) return { error: 'Invalid data fields' };
+    return await signInSocial( { id, user_id: userBySocial._id, session } );
 };

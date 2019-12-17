@@ -1,16 +1,20 @@
 const FacebookStrategy = require( 'passport-facebook-token' );
-const { socialAuth } = require( './auth' );
+const InstagramStrategy = require( 'passport-instagram-token' );
+const GoogleStrategy = require( 'passport-google-token' ).Strategy;
 
 module.exports = async( passport ) => {
-    passport.use( 'facebook', new FacebookStrategy( {
-        clientID: process.env.FACEBOOK_APP_ID,
-        clientSecret: process.env.FACEBOOK_APP_SECRET
-    },
-    ( async ( accessToken, refreshToken, profile, next ) => {
-        const provider = profile.provider;
-        const avatar_url = profile.photos && profile.photos[ 0 ].value;
-        const { id, name } = profile._json;
+    const credentials = { clientID: process.env.APP_ID, clientSecret: process.env.APP_SECRET };
 
-        await socialAuth( { name, provider, avatar_url, id, next } );
-    } ) ) );
+    passport.use( 'facebook', new FacebookStrategy( credentials, getSocialFields ) );
+    passport.use( 'instagram', new InstagramStrategy( credentials, getSocialFields ) );
+    passport.use( 'google', new GoogleStrategy( credentials, getSocialFields ) );
+};
+
+
+const getSocialFields = async( accessToken, refreshToken, profile, next ) => {
+    const provider = profile.provider;
+    const avatar = profile.photos && profile.photos[ 0 ].value;
+    const { id, name } = profile._json;
+
+    next( { fields: { socialName: name, provider, avatar, id } } );
 };

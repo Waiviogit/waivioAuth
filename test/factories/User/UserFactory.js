@@ -1,6 +1,6 @@
 const { faker, models } = require( '../../testHelper' );
 
-const create = async ( { name, alias, json_metadata, auth } ) => {
+const create = async ( { name, alias, json_metadata, auth } = {} ) => {
     const userData = {
         name: name || `${faker.name.firstName()}${faker.random.number()}`,
         alias: alias || `${faker.name.firstName()}${faker.random.number()}`,

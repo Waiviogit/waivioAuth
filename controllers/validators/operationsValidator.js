@@ -1,5 +1,5 @@
 const Joi = require( '@hapi/joi' );
-const options = { allowUnknown: true, stripUnknown: true }
+const options = { allowUnknown: true, stripUnknown: true };
 
 exports.transportShcema = Joi.object().keys( {
     id: Joi.string().valid(

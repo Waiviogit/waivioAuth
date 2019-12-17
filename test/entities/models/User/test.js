@@ -3,160 +3,195 @@ const { UserFactory } = require( '../../../factories' );
 
 const rewire = require( 'rewire' );
 const UserModelRewire = rewire( '../../../../models/userModel' );
-const getUserMetadata = UserModelRewire.__get__( 'getUserMetadata' );
+const generateSocialLink = UserModelRewire.__get__( 'generateSocialLink' );
 
 describe( 'userModel', async () => {
-    describe( 'findOrCreateSocial', async () => {
-        let query, name, alias, session, provider, metadata, auth_id;
+    describe( 'signUpSocial', async () => {
+        let userName, pickFields, socialName, provider, avatar, id, session;
 
         beforeEach( async() => {
             await dropDatabase();
-            auth_id = new ObjectID().toString();
-            name = 'name';
-            alias = 'alias';
+            id = new ObjectID().toString();
+            userName = 'name';
+            socialName = 'socialName';
+            pickFields = undefined;
+            avatar = 'image_url';
             provider = 'facebook';
             session = {
                 sid: new ObjectID(),
                 secret_token: crypto.SHA512( `${new Date()}` ).toString()
             };
-
-            query = { name, alias, 'auth.provider': provider, 'auth.id': auth_id };
-            metadata = { profile_image: 'image_url' };
         } );
 
-        it( 'should create user with avatar', async() => {
-            await UserModel.findOrCreateSocial( { query, session, metadata } );
-            const user = await models.User.findOne( { name } );
+        it( 'should be successfully sign up without metadata', async() => {
+            const result = await UserModel.signUpSocial( { userName, pickFields, socialName, provider, avatar, id, session } );
+            const user = await models.User.findOne( { name: userName } );
 
+            expect( result ).to.have.all.keys( 'user', 'session' );
             expect( user.auth.sessions.length ).to.be.eq( 1 );
-            expect( user.json_metadata ).to.be.eq( JSON.stringify( { profile: { profile_image: 'image_url' } } ) );
+            expect( user.json_metadata ).to.be.eq( '' );
             expect( user.auth.provider ).to.be.eq( provider );
             expect( user.auth.sessions[ 0 ].sid ).to.be.eql( session.sid.toString() );
             expect( user.auth.sessions[ 0 ].secret_token ).to.be.eq( session.secret_token );
-            expect( user.alias ).to.be.eq( alias );
-            expect( user.name ).to.be.eq( name );
+            expect( user.name ).to.be.eq( userName );
+            expect( user.alias ).to.be.undefined ;
         } );
 
-        it( 'get actual data', async() => {
-            const result = await UserModel.findOrCreateSocial( { query, session, metadata } );
+        it( 'should be successfully sign up with metadata', async() => {
+            pickFields = true;
+            const result = await UserModel.signUpSocial( { userName, pickFields, socialName, provider, avatar, id, session } );
+            const user = await models.User.findOne( { name: userName } );
+            const metadata = { profile: {
+                name: socialName,
+                profile_image: 'image_url',
+                facebook: `https://www.facebook.com/${id}`
+            } };
 
-            expect( result.auth.sessions.length ).to.be.eq( 1 );
-        } );
-
-        it( 'should create user without avatar', async() => {
-            await UserModel.findOrCreateSocial( { query, session } );
-            const user = await models.User.findOne( { name } );
-
+            expect( result ).to.have.all.keys( 'user', 'session' );
             expect( user.auth.sessions.length ).to.be.eq( 1 );
-            expect( user.json_metadata ).to.be.eq( JSON.stringify( { profile: { } } ) );
+            expect( user.json_metadata ).to.be.eql( JSON.stringify( metadata ) );
             expect( user.auth.provider ).to.be.eq( provider );
             expect( user.auth.sessions[ 0 ].sid ).to.be.eql( session.sid.toString() );
             expect( user.auth.sessions[ 0 ].secret_token ).to.be.eq( session.secret_token );
-            expect( user.alias ).to.be.eq( alias );
-            expect( user.name ).to.be.eq( name );
+            expect( user.name ).to.be.eq( userName );
+            expect( user.alias ).to.be.eq( socialName ) ;
         } );
 
-        it( 'should update user without metadata with early created with empty metadata', async() => {
-            await UserFactory.create( { name, alias, auth: { id: auth_id, provider: 'facebook', sessions: [ session ] } } );
-            await UserModel.findOrCreateSocial( { query, session } );
-            const user = await models.User.findOne( { name } );
+        it( 'should be successfully sign up without avatar', async() => {
+            pickFields = true;
+            const result = await UserModel.signUpSocial( { userName, pickFields, socialName, provider, avatar: null, id, session } );
+            const user = await models.User.findOne( { name: userName } );
+            const metadata = { profile: {
+                name: socialName,
+                profile_image: null,
+                facebook: `https://www.facebook.com/${id}`
+            } };
 
-            expect( await models.User.find().countDocuments() ).to.be.eq( 1 );
-            expect( user.auth.sessions.length ).to.be.eq( 2 );
-            expect( user.json_metadata ).to.be.eq( JSON.stringify( { profile: { } } ) );
+            expect( result ).to.have.all.keys( 'user', 'session' );
+            expect( user.auth.sessions.length ).to.be.eq( 1 );
+            expect( user.json_metadata ).to.be.eql( JSON.stringify( metadata ) );
             expect( user.auth.provider ).to.be.eq( provider );
             expect( user.auth.sessions[ 0 ].sid ).to.be.eql( session.sid.toString() );
             expect( user.auth.sessions[ 0 ].secret_token ).to.be.eq( session.secret_token );
-            expect( user.alias ).to.be.eq( alias );
-            expect( user.name ).to.be.eq( name );
+            expect( user.name ).to.be.eq( userName );
+            expect( user.alias ).to.be.eq( socialName ) ;
         } );
 
-        it( 'should update user with metadata with early created with empty metadata', async() => {
-            await UserFactory.create( { name, alias, auth: { id: auth_id, provider: 'facebook', sessions: [ session ] } } );
-            await UserModel.findOrCreateSocial( { query, session, metadata } );
-            const user = await models.User.findOne( { name } );
+        it( 'should retrun error', async() => {
+            const { error } = await UserModel.signUpSocial( { undefined, pickFields, socialName, provider, avatar, id, session } );
 
-            expect( await models.User.find().countDocuments() ).to.be.eq( 1 );
-            expect( user.auth.sessions.length ).to.be.eq( 2 );
-            expect( user.json_metadata ).to.be.eq( JSON.stringify( { profile: { profile_image: 'image_url' } } ) );
-            expect( user.auth.provider ).to.be.eq( provider );
-            expect( user.auth.sessions[ 0 ].sid ).to.be.eql( session.sid.toString() );
-            expect( user.auth.sessions[ 0 ].secret_token ).to.be.eq( session.secret_token );
-            expect( user.alias ).to.be.eq( alias );
-            expect( user.name ).to.be.eq( name );
-        } );
-
-        it( 'should set user image with invalid user metadata', async() => {
-            await UserFactory.create( {
-                name,
-                alias,
-                auth: { id: auth_id,
-                    provider: 'facebook',
-                    sessions: [ session ]
-                },
-                json_metadata: 'sdkjfklsdjf' } );
-            await UserModel.findOrCreateSocial( { query, session, metadata } );
-            const user = await models.User.findOne( { name } );
-
-            expect( await models.User.find().countDocuments() ).to.be.eq( 1 );
-            expect( user.auth.sessions.length ).to.be.eq( 2 );
-            expect( user.json_metadata ).to.be.eq( JSON.stringify( { profile: { profile_image: 'image_url' } } ) );
-            expect( user.auth.provider ).to.be.eq( provider );
-            expect( user.auth.sessions[ 0 ].sid ).to.be.eql( session.sid.toString() );
-            expect( user.auth.sessions[ 0 ].secret_token ).to.be.eq( session.secret_token );
-            expect( user.alias ).to.be.eq( alias );
-            expect( user.name ).to.be.eq( name );
-        } );
-
-        it( 'should update user image', async() => {
-            await UserFactory.create( {
-                name,
-                alias,
-                auth: { id: auth_id,
-                    provider: 'facebook',
-                    sessions: [ session ]
-                },
-                json_metadata: JSON.stringify( { profile: { image_profile: 'old_url' } } )
-            } );
-            await UserModel.findOrCreateSocial( { query, session, metadata } );
-            const user = await models.User.findOne( { name } );
-
-            expect( await models.User.find().countDocuments() ).to.be.eq( 1 );
-            expect( user.auth.sessions.length ).to.be.eq( 2 );
-            expect( user.json_metadata ).to.be.eq( JSON.stringify( { profile: { profile_image: 'image_url' } } ) );
-            expect( user.auth.provider ).to.be.eq( provider );
-            expect( user.auth.sessions[ 0 ].sid ).to.be.eql( session.sid.toString() );
-            expect( user.auth.sessions[ 0 ].secret_token ).to.be.eq( session.secret_token );
-            expect( user.alias ).to.be.eq( alias );
-            expect( user.name ).to.be.eq( name );
+            expect( error ).to.be.exist;
         } );
     } );
-    describe( 'getUserMetadata', async () => {
-        let user;
+    describe( 'signInSocial', async () => {
+        let user, session;
 
         beforeEach( async() => {
-            user = { json_metadata: '' };
+            await dropDatabase();
+            session = {
+                sid: new ObjectID(),
+                secret_token: crypto.SHA512( `${new Date()}` ).toString()
+            };
+            user = await UserFactory.create( { auth: { sessions: [ ] } } );
         } );
 
-        it( 'get user metadata with empty user metadata', async() => {
-            const result = await getUserMetadata( { user } );
+        it( 'should be successfully return sign in data', async() => {
+            const result = await UserModel.signInSocial( { user_id: user._id, session } );
+            const findUser = await models.User.findOne( { _id: user._id } );
 
-            expect( result ).to.be.eql( {} );
+            expect( result ).to.have.all.keys( 'user', 'session' );
+            expect( findUser.auth.sessions.length ).to.be.eq( 1 );
         } );
 
-        it( 'get user metadata with invalid metadata', async() => {
-            user.json_metadata = 'invalid_data';
-            const result = await getUserMetadata( { user } );
+        it( 'should many times sign in', async() => {
+            for( let i = 0;i < 6;i++ ) {
+                await UserModel.signInSocial( { user_id: user._id, session } );
+            }
+            const findUser = await models.User.findOne( { _id: user._id } );
 
-            expect( result ).to.be.eql( {} );
+            expect( findUser.auth.sessions.length ).to.be.eq( 5 );
+        } );
+    } );
+    describe( 'findUserBySocial', async () => {
+        let id, provider;
+
+        beforeEach( async() => {
+            await dropDatabase();
+            id = new ObjectID();
+            provider = 'facebook';
+            await UserFactory.create( { auth: { provider, id } } );
+            await UserFactory.create( );
+            await UserFactory.create( );
         } );
 
-        it( 'get user metadata with valid metadata', async() => {
-            user.json_metadata = JSON.stringify( { data: { key: 'value' } } );
-            const result = await getUserMetadata( { user } );
+        it( 'get user by social data', async() => {
+            const result = await UserModel.findUserBySocial( { id, provider } );
 
-            expect( result ).to.be.eql( { data: { key: 'value' } } );
+            expect( result ).to.be.exist;
         } );
+
+        it( 'do not get user with invalid id', async() => {
+            const result = await UserModel.findUserBySocial( { id: new ObjectID(), provider } );
+
+            expect( result ).to.be.null;
+        } );
+
+        it( 'do not get user with invalid provider', async() => {
+            const result = await UserModel.findUserBySocial( { id, provider: 'aaaa' } );
+
+            expect( result ).to.be.null;
+        } );
+    } );
+    describe( 'findUserByName', async () => {
+        let name;
+
+        beforeEach( async() => {
+            await dropDatabase();
+            name = 'facebook';
+            await UserFactory.create( { name } );
+            await UserFactory.create( );
+            await UserFactory.create( );
+        } );
+
+        it( 'get user by name', async() => {
+            const result = await UserModel.findUserByName( { name } );
+
+            expect( result ).to.be.exist;
+        } );
+
+        it( 'do not get user with invalid name', async() => {
+            const result = await UserModel.findUserByName( { name: 'aaa' } );
+
+            expect( result ).to.be.null;
+        } );
+    } );
+    describe( 'generateSocialLink', async () => {
+        let provider, id;
+
+        beforeEach( async() => {
+            id = new ObjectID();
+        } );
+
+        it( 'get facebook link', async() => {
+            provider = 'facebook';
+            const result = await generateSocialLink( { provider, id } );
+
+            expect( result ).to.be.eq( `https://www.facebook.com/${id}` );
+        } );
+
+        it( 'get instagram link', async() => {
+            provider = 'instagram';
+            const result = await generateSocialLink( { provider, id } );
+
+            expect( result ).to.be.eq( `https://www.instagram.com/${id}` );
+        } );
+
+        it( 'should return null', async() => {
+            const result = await generateSocialLink( { provider: 'aa', id } );
+
+            expect( result ).to.be.null;
+        } );
+
     } );
     describe( 'destroySession', async () => {
         let user, session;

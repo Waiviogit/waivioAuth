@@ -114,6 +114,41 @@
           }
         }
       }
+    },
+    "/has_social_account": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "produces": [ "application/json" ],
+        "description": "Check demo user authorize",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "body",
+            "description": "id of social account",
+            "type": "string",
+            "example": "32545223563474356",
+            "required": true
+          },
+          {
+            "name": "provider",
+            "in": "body",
+            "description": "user provider",
+            "type": "string",
+            "example": "facebook",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "data": {"user": "user data" }
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
