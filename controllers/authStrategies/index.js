@@ -14,9 +14,9 @@ exports.socialStrategy = async( req, res, next ) => {
 
 const pickSocialData = async( { passport, provider, req, res, next } ) => {
     return await new Promise( ( resolve ) => {
-        passport.authenticate( provider, ( { fields } ) => {
-            if( !fields ) return render.unauthorized( res, 'Invalid token' );
-            resolve( fields );
+        passport.authenticate( provider, ( data ) => {
+            if( !data || !data.fields ) return render.unauthorized( res, 'Invalid token' );
+            resolve( data.fields );
         } )( req, res, next );
     } );
 };

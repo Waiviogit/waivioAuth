@@ -6,7 +6,11 @@ const encodeToken = ( { access_token } ) => {
 };
 
 const decodeToken = async ( { access_token } ) => {
-    return crypto.AES.decrypt( access_token, config.crypto_key ).toString( crypto.enc.Utf8 );
+    try{
+        return crypto.AES.decrypt( access_token, config.crypto_key ).toString( crypto.enc.Utf8 );
+    } catch( error ) {
+        return null;
+    }
 };
 
 module.exports = { encodeToken, decodeToken };

@@ -1,4 +1,4 @@
-const { chai, chaiHttp, app, sinon, dropDatabase, AuthStrategies, ObjectID, crypto, AuthenticationModule, jwt } = require( '../../../testHelper' );
+const { chai, chaiHttp, app, sinon, dropDatabase, AuthStrategies, ObjectID, crypto, AuthenticationModule, jwt, OperationsHelper } = require( '../../../testHelper' );
 const { UserFactory, TokenFactory } = require( '../../../factories/index' );
 
 chai.use( chaiHttp );
@@ -45,7 +45,8 @@ describe( 'Authorization', async () => {
         } );
 
         it( 'should authorize with valid token', async () => {
-            sinon.stub( AuthStrategies, 'facebookStrategy' ).returns( Promise.resolve( { user, session } ) );
+            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
+            sinon.stub( AuthStrategies, 'socialStrategy' ).returns( Promise.resolve( { user, session } ) );
             const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token' } );
 
             result.should.have.status( 200 );
@@ -53,7 +54,8 @@ describe( 'Authorization', async () => {
         } );
 
         it( 'check access_token', async () => {
-            sinon.stub( AuthStrategies, 'facebookStrategy' ).returns( Promise.resolve( { user, session } ) );
+            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
+            sinon.stub( AuthStrategies, 'socialStrategy' ).returns( Promise.resolve( { user, session } ) );
             const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token' } );
             const token = await AuthenticationModule.TokenSalt.decodeToken( { access_token: result.headers[ 'access-token' ] } );
             const decoded_token = jwt.decode( token );
@@ -63,7 +65,7 @@ describe( 'Authorization', async () => {
         } );
 
         it( 'check auth in view', async () => {
-            sinon.stub( AuthStrategies, 'facebookStrategy' ).returns( Promise.resolve( { user: user.toObject(), session } ) );
+            sinon.stub( AuthStrategies, 'socialStrategy' ).returns( Promise.resolve( { user: user.toObject(), session } ) );
             const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token' } );
 
             expect( result.body.user.auth ).to.be.undefined;
@@ -117,5 +119,45 @@ describe( 'Authorization', async () => {
             result.should.have.status( 401 );
             expect( result.headers[ 'access-token' ] ).to.be.undefined;
         } );
+    } );
+    describe( 'hasSocialAccount', async () => {
+        let id, provider;
+
+        beforeEach( async () => {
+            id = new ObjectID();
+            provider = 'facebook';
+            await dropDatabase();
+            await UserFactory.create( { auth: { provider, id } } );
+        } );
+
+
+        it( 'should return true with exist user', async () => {
+            const result = await chai.request( app ).get( `/auth/has_social_account?provider=facebook&id=${id}` );
+
+            result.should.have.status( 200 );
+            expect( result.body.result ).to.be.true;
+        } );
+
+        it( 'should return false with not exist provider', async () => {
+            const result = await chai.request( app ).get( `/auth/has_social_account?provider=aa&id=${id}` );
+
+            result.should.have.status( 200 );
+            expect( result.body.result ).to.be.false;
+        } );
+
+        it( 'should return false with not exist id', async () => {
+            const result = await chai.request( app ).get( '/auth/has_social_account?provider=facebook&id=aaa' );
+
+            result.should.have.status( 200 );
+            expect( result.body.result ).to.be.false;
+        } );
+
+        it( 'should return false without data', async () => {
+            const result = await chai.request( app ).get( '/auth/has_social_account' );
+
+            result.should.have.status( 200 );
+            expect( result.body.result ).to.be.false;
+        } );
+
     } );
 } );

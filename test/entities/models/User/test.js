@@ -1,4 +1,4 @@
-const { expect, models, dropDatabase, UserModel, ObjectID, crypto } = require( '../../../testHelper' );
+const { expect, models, dropDatabase, UserModel, ObjectID, crypto, sinon, OperationsHelper } = require( '../../../testHelper' );
 const { UserFactory } = require( '../../../factories' );
 
 const rewire = require( 'rewire' );
@@ -23,7 +23,12 @@ describe( 'userModel', async () => {
             };
         } );
 
+        afterEach( () => {
+            sinon.restore();
+        } );
+
         it( 'should be successfully sign up without metadata', async() => {
+            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
             const result = await UserModel.signUpSocial( { userName, pickFields, socialName, provider, avatar, id, session } );
             const user = await models.User.findOne( { name: userName } );
 
@@ -38,6 +43,7 @@ describe( 'userModel', async () => {
         } );
 
         it( 'should be successfully sign up with metadata', async() => {
+            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
             pickFields = true;
             const result = await UserModel.signUpSocial( { userName, pickFields, socialName, provider, avatar, id, session } );
             const user = await models.User.findOne( { name: userName } );
@@ -58,6 +64,7 @@ describe( 'userModel', async () => {
         } );
 
         it( 'should be successfully sign up without avatar', async() => {
+            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
             pickFields = true;
             const result = await UserModel.signUpSocial( { userName, pickFields, socialName, provider, avatar: null, id, session } );
             const user = await models.User.findOne( { name: userName } );
@@ -77,10 +84,18 @@ describe( 'userModel', async () => {
             expect( user.alias ).to.be.eq( socialName ) ;
         } );
 
-        it( 'should retrun error', async() => {
-            const { error } = await UserModel.signUpSocial( { undefined, pickFields, socialName, provider, avatar, id, session } );
+        it( 'should return error', async() => {
+            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
+            const { error } = await UserModel.signUpSocial( { pickFields, socialName, provider, avatar, id, session } );
 
             expect( error ).to.be.exist;
+        } );
+
+        it( 'should return errro with object bot error', async() => {
+            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { error: 'Some error' } ) );
+            const { error } = await UserModel.signUpSocial( { undefined, pickFields, socialName, provider, avatar, id, session } );
+
+            expect( error ).to.be.eq( 'Some error' );
         } );
     } );
     describe( 'signInSocial', async () => {

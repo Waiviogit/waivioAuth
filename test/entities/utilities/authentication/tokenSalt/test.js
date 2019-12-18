@@ -24,6 +24,13 @@ describe( 'tokenSalt', async () => {
             expect( decoded ).to.be.eql( access_token );
         } );
 
+        it( 'should not decode invalid token', async () => {
+            await AuthenticationModule.TokenSalt.encodeToken( { access_token } );
+            const decoded = await AuthenticationModule.TokenSalt.decodeToken( { access_token: 'aaa' } );
+
+            expect( decoded ).to.be.eql( '' );
+        } );
+
     } );
 
 } );

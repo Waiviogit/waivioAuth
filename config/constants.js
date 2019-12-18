@@ -50,7 +50,7 @@ exports.actionUrls = {
 };
 
 exports.guestActions = {
-    custom_json: [ 'waivio_guest_follow', 'waivio_guest_follow_wobject', 'waivio_guest_vote' ],
+    custom_json: [ 'waivio_guest_follow', 'waivio_guest_follow_wobject', 'waivio_guest_vote', 'waivio_guest_create' ],
     comment: [ 'waivio_guest_comment' ],
     api: [ 'waivio_guest_update' ]
 };
