@@ -155,8 +155,19 @@ describe( 'Authorization', async () => {
         it( 'should return false without data', async () => {
             const result = await chai.request( app ).get( '/auth/has_social_account' );
 
-            result.should.have.status( 200 );
-            expect( result.body.result ).to.be.false;
+            result.should.have.status( 422 );
+        } );
+
+        it( 'should return false without id', async () => {
+            const result = await chai.request( app ).get( '/auth/has_social_account?provider=aa' );
+
+            result.should.have.status( 422 );
+        } );
+
+        it( 'should return false without provider', async () => {
+            const result = await chai.request( app ).get( '/auth/has_social_account?id=aa' );
+
+            result.should.have.status( 422 );
         } );
 
     } );
