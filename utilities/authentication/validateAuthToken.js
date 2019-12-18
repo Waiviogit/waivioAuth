@@ -29,8 +29,9 @@ const validateAuthToken = async ( req, res, next ) => {
 
     if ( error ) return render.unauthorized( res, error );
 
-    await User.findById( payload.id ).lean().then(
+    await User.findOne( { _id: payload.id } ).lean().then(
         async ( doc ) => {
+            if( !doc ) return render.unauthorized( res, 'User not exist' );
             session = Sessions.findSession( { sessions: doc.auth && doc.auth.sessions, sid: payload.sid } );
             if( session ) {
                 const { result } = await Sessions.verifyToken( { decoded_token, session, doc, req, res } );
