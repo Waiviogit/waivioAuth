@@ -2,8 +2,20 @@ const logger = require( 'morgan' );
 const cookieParser = require( 'cookie-parser' );
 const swaggerUi = require( 'swagger-ui-express' );
 const swaggerDocument = require( './swagger/swagger.json' );
+const Sentry = require( '@sentry/node' );
 
 module.exports = function( app, express ) {
+    if( process.env.NODE_ENV === 'staging' ) {
+        Sentry.init( { dsn: 'https://d0c3688cfc0543d8a6246a1865a8b44b@sentry.io/1860908' } );
+        app.use( Sentry.Handlers.requestHandler() );
+        app.use( Sentry.Handlers.errorHandler( {
+            shouldHandleError( error ) {
+                // Capture all 404 and 500 errors
+                if ( error.status === 404 || error.status === 500 ) return true;
+                return false;
+            }
+        } ) );
+    }
     app.use( cookieParser() );
     app.use( express.json() );
     app.use( logger( 'dev' ) );
