@@ -86,16 +86,16 @@ describe( 'userModel', async () => {
 
         it( 'should return error', async() => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
-            const { error } = await UserModel.signUpSocial( { pickFields, socialName, provider, avatar, id, session } );
+            const { message } = await UserModel.signUpSocial( { pickFields, socialName, provider, avatar, id, session } );
 
-            expect( error ).to.be.exist;
+            expect( message ).to.be.exist;
         } );
 
         it( 'should return errro with object bot error', async() => {
-            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { error: 'Some error' } ) );
-            const { error } = await UserModel.signUpSocial( { undefined, pickFields, socialName, provider, avatar, id, session } );
+            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { message: 'Some error' } ) );
+            const { message } = await UserModel.signUpSocial( { userName, pickFields, socialName, provider, avatar, id, session } );
 
-            expect( error ).to.be.eq( 'Some error' );
+            expect( message ).to.be.eq( 'Some error' );
         } );
     } );
     describe( 'signInSocial', async () => {

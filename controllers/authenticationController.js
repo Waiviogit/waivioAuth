@@ -6,9 +6,9 @@ const validators = require( './validators' );
 const Strategies = require( './authStrategies' );
 
 const socialSignIn = async ( req, res, next ) => {
-    const { user, session, error } = await Strategies.socialStrategy( req, res, next );
+    const { user, session, message } = await Strategies.socialStrategy( req, res, next );
 
-    if( error ) return render.unauthorized( res, error );
+    if( message ) return render.unauthorized( res, message );
 
     setAuthHeaders( res, user, session );
     return render.success( res, signInView( { user } ) );

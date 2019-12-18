@@ -2,11 +2,11 @@ const _ = require( 'lodash' );
 const Requests = require( './api/requests' );
 const { actionUrls, guestActions } = require( '../../config/constants' );
 
-const transportAction = async( { params } ) => {
+const transportAction = async( { params, access_token } ) => {
     const requestData = getRequestData( { actionType: params.id, userName: params.userName } );
-    const { status, json, error } = await Requests.sendRequest( { path: requestData.url, type: requestData.type, params } );
+    const { status, json, message } = await Requests.sendRequest( { path: requestData.url, type: requestData.type, params, access_token } );
 
-    return { status, json, error };
+    return { status, json, message };
 };
 
 const getRequestData = ( { actionType, userName } ) => {

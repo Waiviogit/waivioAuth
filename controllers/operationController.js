@@ -6,9 +6,9 @@ const transportAction = async ( req, res ) => {
     const { params, validation_error } = validators.validate( req.body, validators.operations.transportShcema );
 
     if ( validation_error ) return render.error( res, validation_error );
-    const { status, json, error } = await OperationsHelper.transportAction( { params } );
+    const { status, json, message } = await OperationsHelper.transportAction( { params } );
 
-    if( error ) return render.unauthorized( res, error );
+    if( message ) return render.unauthorized( res, message );
 
     return render.custom( res, status, json );
 };

@@ -10,13 +10,13 @@ describe( 'Api requests', async () => {
         it( 'handle  request with invalid type of request', async() => {
             const result = await Requests.sendRequest( { path: '', type: 'someType' } );
 
-            expect( result ).to.be.eql( { error: undefined, json: undefined, status: 500 } );
+            expect( result ).to.be.eql( { message: undefined, json: undefined, status: 500 } );
         } );
 
         it( 'handle request with invalid url type of request', async() => {
             const result = await Requests.sendRequest( { path: '', type: 'post' } );
 
-            expect( result ).to.be.eql( { error: undefined, json: undefined, status: 500 } );
+            expect( result ).to.be.eql( { message: undefined, json: undefined, status: 500 } );
         } );
     } );
 } );

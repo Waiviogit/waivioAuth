@@ -1,4 +1,4 @@
-const { expect, models, sinon, dropDatabase, AuthenticationModule, ObjectID, crypto } = require( '../../../../testHelper' );
+const { expect, models, sinon, dropDatabase, AuthenticationModule, ObjectID, crypto, OperationsHelper } = require( '../../../../testHelper' );
 const { UserFactory } = require( '../../../../factories' );
 
 describe( 'auth', async () => {
@@ -25,11 +25,12 @@ describe( 'auth', async () => {
         } );
 
         it( 'check sign up with valid data', async () => {
-            const { user, session, error } = await AuthenticationModule.Auth.socialAuth( { userName, pickSocialFields, socialName, provider, avatar, id } );
+            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
+            const { user, session, message } = await AuthenticationModule.Auth.socialAuth( { userName, pickSocialFields, socialName, provider, avatar, id } );
 
             expect( user ).to.be.exist;
             expect( session ).to.be.exist;
-            expect( error ).to.be.undefined;
+            expect( message ).to.be.undefined;
             expect( user.auth.sessions.length ).to.be.eq( 1 );
             expect( user.json_metadata ).to.be.eq( '' );
             expect( user.auth.provider ).to.be.eq( provider );
@@ -40,8 +41,9 @@ describe( 'auth', async () => {
         } );
 
         it( 'check sign up with true pickSocialFields', async () => {
+            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
             pickSocialFields = true;
-            const { user, session, error } = await AuthenticationModule.Auth.socialAuth( { userName, pickSocialFields, socialName, provider, avatar, id } );
+            const { user, session, message } = await AuthenticationModule.Auth.socialAuth( { userName, pickSocialFields, socialName, provider, avatar, id } );
             const metadata = { profile: {
                 name: socialName,
                 profile_image: 'image_url',
@@ -50,7 +52,7 @@ describe( 'auth', async () => {
 
             expect( user ).to.be.exist;
             expect( session ).to.be.exist;
-            expect( error ).to.be.undefined;
+            expect( message ).to.be.undefined;
             expect( user.auth.sessions.length ).to.be.eq( 1 );
             expect( user.json_metadata ).to.be.eql( JSON.stringify( metadata ) );
             expect( user.auth.provider ).to.be.eq( provider );
@@ -61,42 +63,44 @@ describe( 'auth', async () => {
         } );
 
         it( 'check sign up with exist user', async () => {
+            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
             await UserFactory.create( { name: userName, auth: { sessions: [ ] } } );
-            const { user, session, error } = await AuthenticationModule.Auth.socialAuth( { userName, pickSocialFields, socialName, provider, avatar, id } );
+            const { user, session, message } = await AuthenticationModule.Auth.socialAuth( { userName, pickSocialFields, socialName, provider, avatar, id } );
 
             expect( user ).to.be.undefined;
             expect( session ).to.be.undefined;
-            expect( error ).to.be.exist;
-            expect( error ).to.be.eq( 'User exist' );
+            expect( message ).to.be.exist;
+            expect( message ).to.be.eq( 'User exist' );
         } );
 
         it( 'check sign up without user name', async () => {
-            const { user, session, error } = await AuthenticationModule.Auth.socialAuth( { userName: null, pickSocialFields, socialName, provider, avatar, id } );
+            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
+            const { user, session, message } = await AuthenticationModule.Auth.socialAuth( { userName: null, pickSocialFields, socialName, provider, avatar, id } );
 
             expect( user ).to.be.undefined;
             expect( session ).to.be.undefined;
-            expect( error ).to.be.exist;
-            expect( error ).to.be.eq( 'Invalid data fields' );
+            expect( message ).to.be.exist;
+            expect( message ).to.be.eq( 'Invalid data fields' );
         } );
 
         it( 'check sign in with valid data', async () => {
             await UserFactory.create( { name: userName, auth: { provider: 'facebook', id: id, sessions: [ ] } } );
-            const { user, session, error } = await AuthenticationModule.Auth.socialAuth( { userName, pickSocialFields, socialName, provider, avatar, id } );
+            const { user, session, message } = await AuthenticationModule.Auth.socialAuth( { userName, pickSocialFields, socialName, provider, avatar, id } );
 
             expect( user ).to.be.exist;
             expect( session ).to.be.exist;
-            expect( error ).to.be.undefined;
+            expect( message ).to.be.undefined;
             expect( user.auth.sessions.length ).to.be.eq( 1 );
         } );
 
         it( 'check sign in with invalid provider', async () => {
             await UserFactory.create( { name: userName, auth: { provider: 'aaaa', id: id, sessions: [ ] } } );
-            const { user, session, error } = await AuthenticationModule.Auth.socialAuth( { userName, pickSocialFields, socialName, provider, avatar, id } );
+            const { user, session, message } = await AuthenticationModule.Auth.socialAuth( { userName, pickSocialFields, socialName, provider, avatar, id } );
 
             expect( user ).to.be.undefined;
             expect( session ).to.be.undefined;
-            expect( error ).to.be.exist;
-            expect( error ).to.be.eq( 'User exist' );
+            expect( message ).to.be.exist;
+            expect( message ).to.be.eq( 'User exist' );
         } );
     } );
 

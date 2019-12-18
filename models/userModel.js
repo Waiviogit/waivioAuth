@@ -1,7 +1,9 @@
+const jwt = require( 'jsonwebtoken' );
+const _ = require( 'lodash' );
+const crypto = require( 'crypto-js' );
+const config = require( '../config' );
 const { User } = require( '../database' ).models;
 const { OperationsHelper } = require( '../utilities/helpers' );
-const config = require( '../config' );
-const _ = require( 'lodash' );
 
 const destroyLastSession = async ( { user } ) => {
     if( _.get( user, 'auth.sessions', false ) && user.auth.sessions.length > config.limit_sessions ) {
@@ -37,18 +39,22 @@ const signUpSocial = async( { userName, pickFields, socialName, provider, avatar
         'auth.id': id
     } );
 
-    const { error } = await OperationsHelper.transportAction( { params: userObjectCreate( {
-        userId: user.name,
-        diplayName: alias,
-        jsonMetadata: metadata ? JSON.stringify( metadata ) : ''
-    } ) } );
-
-    if( error ) return { error };
-
     try{
         await user.save();
+        const access_token = prepareToken( { user, session } );
+        const { message } = await OperationsHelper.transportAction( userObjectCreate( {
+            userId: user.name,
+            displayName: alias ? alias : '',
+            json_metadata: metadata ? JSON.stringify( metadata ) : '',
+            access_token
+        } ) );
+
+        if( message ) {
+            await User.deleteOne( { _id: user._id } );
+            return { message };
+        }
     } catch( err ) {
-        return { error: err };
+        return { message: err };
     }
 
     return{ user: user.toObject(), session };
@@ -69,8 +75,14 @@ const generateSocialLink = ( { provider, id } ) => {
     }
 };
 
-const userObjectCreate = ( { userId, displayName, jsonMetadata } ) => {
-    return { id: 'waivio_guest_create', json: { userId, displayName, jsonMetadata } };
+const userObjectCreate = ( { userId, displayName, json_metadata, access_token } ) => {
+    return { params: { id: 'waivio_guest_create', json: { userId, displayName, json_metadata } }, access_token };
+};
+
+const prepareToken = ( { user, session } ) => {
+    const access_token = jwt.sign( { name: user.name, id: user._id, sid: session.sid }, session.secret_token, { expiresIn: config.session_expiration } );
+
+    return crypto.AES.encrypt( access_token, config.crypto_key ).toString();
 };
 
 module.exports = {

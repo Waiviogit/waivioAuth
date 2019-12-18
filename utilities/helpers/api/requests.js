@@ -1,16 +1,16 @@
 const axios = require( 'axios' );
 
-const sendRequest = async( { path, type, params } ) => {
-    return await axios( { baseURL: path, method: type, data: params } )
+const sendRequest = async( { path, type, params, access_token } ) => {
+    return await axios( { baseURL: path, method: type, data: params, headers: { 'access-token': access_token } } )
         .then( ( response ) => getResponse( { response } ) )
         .catch( ( error ) => getResponse( { response: error.response } ) );
 };
 
 const getResponse = ( { response } ) => {
     const status = response && response.status || 500;
-    const { error, json } = response && response.data || {};
+    const { message, json } = response && response.data || {};
 
-    return { status, error, json };
+    return { status, message, json };
 };
 
 

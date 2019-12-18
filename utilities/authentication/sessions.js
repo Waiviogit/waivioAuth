@@ -90,6 +90,7 @@ const confirmAuthToken = ( { req, user, session, decoded_token, secret_token } )
 };
 
 module.exports = {
+    tokenSign,
     generateSession,
     setAuthHeaders,
     decodeToken,
