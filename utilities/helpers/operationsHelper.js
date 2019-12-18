@@ -4,7 +4,12 @@ const { actionUrls, guestActions } = require( '../../config/constants' );
 
 const transportAction = async( { params, access_token } ) => {
     const requestData = getRequestData( { actionType: params.id, userName: params.userName } );
-    const { status, json, message } = await Requests.sendRequest( { path: requestData.url, type: requestData.type, params, access_token } );
+    const { status, json, message } = await Requests.sendRequest( {
+        path: requestData.url,
+        type: requestData.type,
+        params,
+        access_token
+    } );
 
     return { status, json, message };
 };

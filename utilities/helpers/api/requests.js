@@ -1,7 +1,10 @@
 const axios = require( 'axios' );
 
 const sendRequest = async( { path, type, params, access_token } ) => {
-    return await axios( { baseURL: path, method: type, data: params, headers: { 'access-token': access_token } } )
+    return await axios( { baseURL: path, method: type, data: params, headers: {
+        'access-token': access_token,
+        'waivio-auth': true
+    } } )
         .then( ( response ) => getResponse( { response } ) )
         .catch( ( error ) => getResponse( { response: error.response } ) );
 };
