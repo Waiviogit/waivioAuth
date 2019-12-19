@@ -8,7 +8,8 @@
     "limit_sessions": 5,
     "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
     "session_expiration": "10m",
-    "waivioUrl": "https://www.waivio.com/"
+    "waivioUrl": "https://www.waivio.com/",
+    "appName": "waivio"
   },
 
   "staging" : {
@@ -20,7 +21,8 @@
     "limit_sessions": 5,
     "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
     "session_expiration": "10m",
-    "waivioUrl": "https://waiviodev.com/"
+    "waivioUrl": "https://waiviodev.com/",
+    "appName": "waivio"
   },
 
   "development": {
@@ -32,7 +34,8 @@
     "limit_sessions": 5,
     "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
     "session_expiration": "1000",
-    "waivioUrl": "https://waiviodev.com/"
+    "waivioUrl": "https://waiviodev.com/",
+    "appName": "waivio"
   },
 
   "test": {
@@ -44,6 +47,7 @@
     "limit_sessions": 5,
     "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
     "session_expiration": "2000",
-    "waivioUrl": "https://test.waiviodev.com/"
+    "waivioUrl": "https://test.waiviodev.com/",
+    "appName": "waivio"
   }
 }

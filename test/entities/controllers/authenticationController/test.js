@@ -12,11 +12,12 @@ describe( 'Authorization', async () => {
         await dropDatabase();
     } );
 
-    describe( 'facebook sign in', async () => {
-        let user, name, alias, provider, session;
+    describe( 'social sign in', async () => {
+        let user, name, alias, provider, session, userName;
 
         beforeEach( async() => {
             name = 'facebook|312321312';
+            userName = 'waivio_username';
             alias = 'alias';
             provider = 'facebook';
             session = {
@@ -51,6 +52,46 @@ describe( 'Authorization', async () => {
 
             result.should.have.status( 200 );
             expect( result.headers[ 'access-token' ] ).to.be.exist;
+        } );
+
+        it( 'should not registrate with invalid name', async () => {
+            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
+            sinon.stub( AuthStrategies, 'socialStrategy' ).returns( Promise.resolve( { user, session } ) );
+            const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token', userName: 'aa' } );
+
+            result.should.have.status( 422 );
+        } );
+
+        it( 'should not registrate with invalid name contains prefix waivio', async () => {
+            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
+            sinon.stub( AuthStrategies, 'socialStrategy' ).returns( Promise.resolve( { user, session } ) );
+            const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token', userName: 'waivio_!dad' } );
+
+            result.should.have.status( 422 );
+        } );
+
+        it( 'should not registrate with valid minlength', async () => {
+            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
+            sinon.stub( AuthStrategies, 'socialStrategy' ).returns( Promise.resolve( { user, session } ) );
+            const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token', userName: 'waivio_a' } );
+
+            result.should.have.status( 200 );
+        } );
+
+        it( 'should not registrate with invalid maxlength name', async () => {
+            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
+            sinon.stub( AuthStrategies, 'socialStrategy' ).returns( Promise.resolve( { user, session } ) );
+            const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token', userName: 'waivio_aaaaaaaaaaaaaaaaa' } );
+
+            result.should.have.status( 422 );
+        } );
+
+        it( 'should registrate with valid name', async () => {
+            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
+            sinon.stub( AuthStrategies, 'socialStrategy' ).returns( Promise.resolve( { user, session } ) );
+            const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token', userName } );
+
+            result.should.have.status( 200 );
         } );
 
         it( 'check access_token', async () => {

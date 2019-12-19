@@ -6,6 +6,9 @@ const validators = require( './validators' );
 const Strategies = require( './authStrategies' );
 
 const socialSignIn = async ( req, res, next ) => {
+    const { validation_error } = validators.validate( req.body, validators.authentication.socialAuthShcema );
+
+    if ( validation_error ) return render.error( res, validation_error );
     const { user, session, message } = await Strategies.socialStrategy( req, res, next );
 
     if( message ) return render.unauthorized( res, message );
