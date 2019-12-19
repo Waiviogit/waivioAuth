@@ -9,7 +9,7 @@ const verifyAuthToken = async ( req, res, next ) => {
 
     if ( error ) return render.unauthorized( res, error );
 
-    await User.findById( payload.id ).lean().then(
+    await User.findById( ObjectId( payload.id ) ).lean().then(
         async ( doc ) => {
             session = Sessions.findSession( { sessions: doc.auth && doc.auth.sessions, sid: payload.sid } );
             if( session ) {
