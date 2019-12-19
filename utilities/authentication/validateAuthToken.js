@@ -1,6 +1,7 @@
 const render = require( '../../concerns/render' );
 const { User } = require( '../../database' ).models;
 const Sessions = require( './sessions' );
+const ObjectId = require( 'mongodb' ).ObjectID;
 
 const verifyAuthToken = async ( req, res, next ) => {
     let session;
@@ -29,7 +30,7 @@ const validateAuthToken = async ( req, res, next ) => {
 
     if ( error ) return render.unauthorized( res, error );
 
-    await User.findOne( { _id: payload.id } ).lean().then(
+    await User.findOne( { _id: ObjectId( payload.id ) } ).lean().then(
         async ( doc ) => {
             if( !doc ) return render.unauthorized( res, 'User not exist' );
             session = Sessions.findSession( { sessions: doc.auth && doc.auth.sessions, sid: payload.sid } );
