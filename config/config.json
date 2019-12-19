@@ -19,7 +19,7 @@
     },
     "limit_sessions": 5,
     "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
-    "session_expiration": "1000",
+    "session_expiration": "10m",
     "waivioUrl": "https://waiviodev.com/"
   },
 
