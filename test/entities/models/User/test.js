@@ -50,7 +50,7 @@ describe( 'userModel', async () => {
             const metadata = { profile: {
                 name: socialName,
                 profile_image: 'image_url',
-                facebook: `https://www.facebook.com/${id}`
+                facebook: id
             } };
 
             expect( result ).to.have.all.keys( 'user', 'session' );
@@ -71,7 +71,7 @@ describe( 'userModel', async () => {
             const metadata = { profile: {
                 name: socialName,
                 profile_image: null,
-                facebook: `https://www.facebook.com/${id}`
+                facebook: id
             } };
 
             expect( result ).to.have.all.keys( 'user', 'session' );
@@ -181,24 +181,25 @@ describe( 'userModel', async () => {
         } );
     } );
     describe( 'generateSocialLink', async () => {
-        let provider, id;
+        let provider, id, socialName;
 
         beforeEach( async() => {
             id = new ObjectID();
+            socialName = 'socialName';
         } );
 
         it( 'get facebook link', async() => {
             provider = 'facebook';
-            const result = await generateSocialLink( { provider, id } );
+            const result = await generateSocialLink( { provider, id, socialName } );
 
-            expect( result ).to.be.eq( `https://www.facebook.com/${id}` );
+            expect( result ).to.be.eq( id );
         } );
 
         it( 'get instagram link', async() => {
             provider = 'instagram';
-            const result = await generateSocialLink( { provider, id } );
+            const result = await generateSocialLink( { provider, id, socialName } );
 
-            expect( result ).to.be.eq( `https://www.instagram.com/${id}` );
+            expect( result ).to.be.eq( socialName );
         } );
 
         it( 'should return null', async() => {

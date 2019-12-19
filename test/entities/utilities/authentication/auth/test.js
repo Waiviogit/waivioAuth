@@ -47,7 +47,7 @@ describe( 'auth', async () => {
             const metadata = { profile: {
                 name: socialName,
                 profile_image: 'image_url',
-                facebook: `https://www.facebook.com/${id}`
+                facebook: id
             } };
 
             expect( user ).to.be.exist;

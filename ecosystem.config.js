@@ -6,8 +6,10 @@ module.exports = {
             env: {
                 COMMON_VARIABLE: 'true',
                 PORT: '8004',
-                APP_ID: '754038848413420',
-                APP_SECRET: '6d0255aa0abd3f68bce0ba4314e16dbd'
+                FACEBOOK_APP_ID: '754038848413420',
+                FACEBOOK_APP_SECRET: '6d0255aa0abd3f68bce0ba4314e16dbd',
+                GOOGLE_APP_ID: '623736583769-qlg46kt2o7gc4kjd2l90nscitf38vl5t.apps.googleusercontent.com',
+                GOGGLE_APP_SECRET: '7vMRiac-95WEcNbKvubfsqsE'
             }
         }
     ],

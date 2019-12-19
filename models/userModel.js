@@ -27,7 +27,7 @@ const signUpSocial = async( { userName, pickFields, socialName, provider, avatar
     let metadata, alias;
 
     if( pickFields ) {
-        metadata = { profile: { name: socialName, profile_image: avatar, [ provider ]: generateSocialLink( { provider, id } ) } };
+        metadata = { profile: { name: socialName, profile_image: avatar, [ provider ]: generateSocialLink( { provider, id, socialName } ) } };
         alias = socialName;
     }
     const user = new User( {
@@ -67,10 +67,10 @@ const signInSocial = async( { user_id, session } ) => {
     return{ user: user, session };
 };
 
-const generateSocialLink = ( { provider, id } ) => {
+const generateSocialLink = ( { provider, id, socialName } ) => {
     switch ( provider ) {
-        case 'facebook' :return `https://www.facebook.com/${id}`;
-        case 'instagram' :return `https://www.instagram.com/${id}`;
+        case 'facebook' :return id;
+        case 'instagram' :return socialName;
         default :return null;
     }
 };

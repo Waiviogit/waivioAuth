@@ -8,9 +8,7 @@ const transportAction = async ( req, res ) => {
     if ( validation_error ) return render.error( res, validation_error );
     const { status, json, message } = await OperationsHelper.transportAction( { params, access_token: req.headers[ 'access-token' ] } );
 
-    if( message ) return render.unauthorized( res, message );
-
-    return render.custom( res, status, json );
+    return render.custom( res, status, json || message );
 };
 
 module.exports = {

@@ -3,11 +3,12 @@ const InstagramStrategy = require( 'passport-instagram-token' );
 const GoogleStrategy = require( 'passport-google-token' ).Strategy;
 
 module.exports = async( passport ) => {
-    const credentials = { clientID: process.env.APP_ID, clientSecret: process.env.APP_SECRET };
+    const facebookCredentials = { clientID: process.env.FACEBOOK_APP_ID, clientSecret: process.env.FACEBOOK_APP_SECRET };
+    const googleCredentials = { clientID: process.env.GOOGLE_APP_ID, clientSecret: process.env.GOOGLE_APP_SECRET };
 
-    passport.use( 'facebook', new FacebookStrategy( credentials, getSocialFields ) );
-    passport.use( 'instagram', new InstagramStrategy( credentials, getSocialFields ) );
-    passport.use( 'google', new GoogleStrategy( credentials, getSocialFields ) );
+    passport.use( 'facebook', new FacebookStrategy( facebookCredentials, getSocialFields ) );
+    passport.use( 'instagram', new InstagramStrategy( facebookCredentials, getSocialFields ) );
+    passport.use( 'google', new GoogleStrategy( googleCredentials, getSocialFields ) );
 };
 
 
