@@ -13,8 +13,8 @@ module.exports = async( passport ) => {
 
 const getSocialFields = async( accessToken, refreshToken, profile, next ) => {
     const provider = profile.provider;
-    const avatar = profile.photos && profile.photos[ 0 ].value;
-    const { id, name } = profile._json;
+    const { id, name, picture } = profile._json;
+    const avatar = picture || profile.photos && profile.photos[ 0 ].value;
 
     next( { fields: { socialName: name, provider, avatar, id } } );
 };
