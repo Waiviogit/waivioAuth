@@ -1,6 +1,7 @@
 const jwt = require( 'jsonwebtoken' );
 const { ObjectID } = require( 'bson' );
 const crypto = require( 'crypto-js' );
+const { uuid } = require('uuidv4');
 const _ = require( 'lodash' );
 const config = require( '../../config' );
 const { User } = require( '../../database' ).models;
@@ -11,7 +12,7 @@ const { encodeToken, decodeToken } = require( './tokenSalt' );
 const generateSession = ( ) => {
     return {
         sid: new ObjectID(),
-        secret_token: crypto.SHA512( `${new Date()}` ).toString()
+        secret_token: crypto.SHA512( `${uuid()}` ).toString()
     };
 };
 
@@ -52,7 +53,7 @@ const refreshSession = async ( { req, doc, old_session } ) => {
     const new_session = generateSession( );
 
     await destroySession( { user_id: doc._id, session: old_session } );
-    await User.updateOne( { _id: doc.id }, { $push: { sessions: new_session } } );
+    await User.updateOne( { _id: doc._id }, { $push: { 'auth.sessions': new_session } } );
     setAuthSession( { req, user: doc, session: new_session } );
 };
 
