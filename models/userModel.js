@@ -79,6 +79,10 @@ const userObjectCreate = ( { userId, displayName, json_metadata, access_token } 
     return { params: { id: 'waivio_guest_create', json: { userId, displayName, json_metadata } }, access_token };
 };
 
+const validateObjectBot = ()=>{
+
+}
+
 const prepareToken = ( { user, session } ) => {
     const access_token = jwt.sign( { name: user.name, id: user._id, sid: session.sid }, session.secret_token, { expiresIn: config.session_expiration } );
 

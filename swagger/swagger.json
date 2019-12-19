@@ -46,7 +46,7 @@
           {
             "name": "access_token",
             "in": "body",
-            "description": "facebook access_token",
+            "description": "instagram access_token",
             "type": "string",
             "required": true
           }],
@@ -73,7 +73,7 @@
           {
             "name": "access_token",
             "in": "body",
-            "description": "facebook access_token",
+            "description": "google access_token",
             "type": "string",
             "required": true
           }],

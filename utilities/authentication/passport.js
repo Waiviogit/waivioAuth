@@ -11,7 +11,6 @@ module.exports = async( passport ) => {
     passport.use( 'google', new GoogleStrategy( googleCredentials, getSocialFields ) );
 };
 
-
 const getSocialFields = async( accessToken, refreshToken, profile, next ) => {
     const provider = profile.provider;
     const avatar = profile.photos && profile.photos[ 0 ].value;
