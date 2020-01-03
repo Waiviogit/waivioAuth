@@ -8,6 +8,6 @@ exports.hasSocialShcema = Joi.object().keys( {
 } ).options( options );
 
 exports.socialAuthShcema = Joi.object().keys( {
-    userName: Joi.string().pattern( new RegExp( `^(${config.appName}_)[a-zA-Z0-9\.\-]{1,16}$` ) )
+    userName: Joi.string().pattern( new RegExp( `^(${config.appName}_)[a-zA-Z0-9\.\-]{1,25}$` ) )
 } ).unknown( true );
 

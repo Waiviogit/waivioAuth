@@ -81,7 +81,7 @@ describe( 'Authorization', async () => {
         it( 'should not registrate with invalid maxlength name', async () => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
             sinon.stub( AuthStrategies, 'socialStrategy' ).returns( Promise.resolve( { user, session } ) );
-            const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token', userName: 'waivio_aaaaaaaaaaaaaaaaa' } );
+            const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token', userName: 'waivio_aaaaaaaaaaaaaaaaaaaaaaaaaa' } );
 
             result.should.have.status( 422 );
         } );
