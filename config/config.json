@@ -34,7 +34,8 @@
     "limit_sessions": 5,
     "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
     "session_expiration": "1000",
-    "waivioUrl": "https://waiviodev.com/",
+    "waivioUrl": "http://localhost:3001/",
+    "": "https://waiviodev.com/",
     "appName": "waivio"
   },
 

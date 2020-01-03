@@ -1,4 +1,6 @@
 const axios = require( 'axios' );
+const FormData = require( 'form-data' );
+const config = require( '../../../config' );
 
 const sendRequest = async( { path, type, params, access_token } ) => {
     return await axios( { baseURL: path, method: type, data: params, headers: {
@@ -16,8 +18,26 @@ const getResponse = ( { response } ) => {
     return { status, message, json };
 };
 
+const uploadAvatar = async( { userName, imageUrl } ) => {
+    const formData = new FormData();
+
+    let boundary = formData.getBoundary();
+
+    formData.append( 'imageUrl', imageUrl );
+    formData.append( 'type', 'avatar' );
+    formData.append( 'userName', userName );
+
+    return await axios.post(
+        `${config.waivioUrl}api/image`,
+        formData,
+        { headers: { 'Content-Type': `multipart/form-data; boundary=${boundary}` } } )
+        .then( ( response ) => response.data && response.data.image )
+        .catch( ( error ) => null );
+};
+
 
 module.exports = {
-    sendRequest
+    sendRequest,
+    uploadAvatar
 };
 

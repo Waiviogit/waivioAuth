@@ -1,4 +1,4 @@
-const { expect, models, dropDatabase, UserModel, ObjectID, crypto, sinon, OperationsHelper } = require( '../../../testHelper' );
+const { expect, models, dropDatabase, UserModel, ObjectID, crypto, sinon, OperationsHelper, Requests } = require( '../../../testHelper' );
 const { UserFactory } = require( '../../../factories' );
 
 const rewire = require( 'rewire' );
@@ -29,6 +29,7 @@ describe( 'userModel', async () => {
 
         it( 'should be successfully sign up without metadata', async() => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
+            sinon.stub( Requests, 'uploadAvatar' ).returns( Promise.resolve( null ) );
             const result = await UserModel.signUpSocial( { userName, pickFields, socialName, provider, avatar, id, session } );
             const user = await models.User.findOne( { name: userName } );
 
@@ -44,6 +45,7 @@ describe( 'userModel', async () => {
 
         it( 'should be successfully sign up with metadata', async() => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
+            sinon.stub( Requests, 'uploadAvatar' ).returns( Promise.resolve( 'image_url' ) );
             pickFields = true;
             const result = await UserModel.signUpSocial( { userName, pickFields, socialName, provider, avatar, id, session } );
             const user = await models.User.findOne( { name: userName } );
@@ -65,6 +67,7 @@ describe( 'userModel', async () => {
 
         it( 'should be successfully sign up without avatar', async() => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
+            sinon.stub( Requests, 'uploadAvatar' ).returns( Promise.resolve( null ) );
             pickFields = true;
             const result = await UserModel.signUpSocial( { userName, pickFields, socialName, provider, avatar: null, id, session } );
             const user = await models.User.findOne( { name: userName } );
@@ -86,13 +89,15 @@ describe( 'userModel', async () => {
 
         it( 'should return error', async() => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
+            sinon.stub( Requests, 'uploadAvatar' ).returns( Promise.resolve( null ) );
             const { message } = await UserModel.signUpSocial( { pickFields, socialName, provider, avatar, id, session } );
 
             expect( message ).to.be.exist;
         } );
 
-        it( 'should return errro with object bot error', async() => {
+        it( 'should return error with object bot error', async() => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { message: 'Some error' } ) );
+            sinon.stub( Requests, 'uploadAvatar' ).returns( Promise.resolve( null ) );
             const { message } = await UserModel.signUpSocial( { userName, pickFields, socialName, provider, avatar, id, session } );
 
             expect( message ).to.be.eq( 'Some error' );

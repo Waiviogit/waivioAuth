@@ -1,4 +1,4 @@
-const { expect, models, sinon, dropDatabase, AuthenticationModule, ObjectID, crypto, OperationsHelper } = require( '../../../../testHelper' );
+const { expect, models, sinon, dropDatabase, AuthenticationModule, ObjectID, crypto, OperationsHelper, Requests } = require( '../../../../testHelper' );
 const { UserFactory } = require( '../../../../factories' );
 
 describe( 'auth', async () => {
@@ -42,6 +42,7 @@ describe( 'auth', async () => {
 
         it( 'check sign up with true pickSocialFields', async () => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
+            sinon.stub( Requests, 'uploadAvatar' ).returns( Promise.resolve( 'image_url' ) );
             pickSocialFields = true;
             const { user, session, message } = await AuthenticationModule.Auth.socialAuth( { userName, pickSocialFields, socialName, provider, avatar, id } );
             const metadata = { profile: {

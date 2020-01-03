@@ -2,6 +2,7 @@ const jwt = require( 'jsonwebtoken' );
 const _ = require( 'lodash' );
 const crypto = require( 'crypto-js' );
 const config = require( '../config' );
+const Requests = require( '../utilities/helpers/api/requests' );
 const { User } = require( '../database' ).models;
 const { OperationsHelper } = require( '../utilities/helpers' );
 
@@ -25,6 +26,8 @@ const findUserByName = async( { name } ) => {
 
 const signUpSocial = async( { userName, pickFields, socialName, provider, avatar, id, session } ) => {
     let metadata, alias;
+
+    if( avatar ) avatar = await Requests.uploadAvatar( { userName, imageUrl: avatar } );
 
     if( pickFields ) {
         metadata = { profile: { name: socialName, profile_image: avatar, [ provider ]: generateSocialLink( { provider, id, socialName } ) } };
@@ -78,10 +81,6 @@ const generateSocialLink = ( { provider, id, socialName } ) => {
 const userObjectCreate = ( { userId, displayName, json_metadata, access_token } ) => {
     return { params: { id: 'waivio_guest_create', json: { userId, displayName, json_metadata } }, access_token };
 };
-
-const validateObjectBot = ()=>{
-
-}
 
 const prepareToken = ( { user, session } ) => {
     const access_token = jwt.sign( { name: user.name, id: user._id, sid: session.sid }, session.secret_token, { expiresIn: config.session_expiration } );
