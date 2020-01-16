@@ -47,7 +47,7 @@ exports.actionUrls = {
     custom_json: { url: `${config.waivioUrl}objects-bot/guest-custom-json`, type: 'post' },
     comment: { url: `${config.waivioUrl}objects-bot/guest-create-comment`, type: 'post' },
     api: { url: `${config.waivioUrl}api/:user_name/userMetadata`, type: 'put' },
-    transfer: { url: `${config.waivioUrl}campaigns_api/guest/transfer`, type: 'post' }
+    transfer: { url: `${config.waivioUrl}campaigns-api/guest/transfer`, type: 'post' }
 };
 
 exports.guestActions = {
