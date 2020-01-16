@@ -11,7 +11,7 @@ const verifyAuthToken = async ( req, res, next ) => {
 
     await User.findById( ObjectId( payload.id ) ).lean().then(
         async ( doc ) => {
-            session = Sessions.findSession( { sessions: doc.auth && doc.auth.sessions, sid: payload.sid } );
+            session = Sessions.findSession( { sessions: doc && doc.auth && doc.auth.sessions, sid: payload.sid } );
             if( session ) {
                 const { result } = Sessions.confirmAuthToken( { req, user: doc, session, decoded_token, secret_token: session.secret_token } );
 
