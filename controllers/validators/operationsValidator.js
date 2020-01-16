@@ -9,6 +9,7 @@ exports.transportShcema = Joi.object().keys( {
         'waivio_guest_comment',
         'waivio_guest_update',
         'waivio_guest_reblog',
+        'waivio_guest_transfer',
         'waivio_guest_account_update' ).required(),
     data: Joi.object().required(),
     userName: Joi.string()

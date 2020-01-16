@@ -46,11 +46,13 @@ exports.LANGUAGES = [ 'en-US',
 exports.actionUrls = {
     custom_json: { url: `${config.waivioUrl}objects-bot/guest-custom-json`, type: 'post' },
     comment: { url: `${config.waivioUrl}objects-bot/guest-create-comment`, type: 'post' },
-    api: { url: `${config.waivioUrl}api/:user_name/userMetadata`, type: 'put' }
+    api: { url: `${config.waivioUrl}api/:user_name/userMetadata`, type: 'put' },
+    transfer: { url: `${config.waivioUrl}campaigns_api/guest/transfer`, type: 'post' }
 };
 
 exports.guestActions = {
     custom_json: [ 'waivio_guest_follow', 'waivio_guest_follow_wobject', 'waivio_guest_vote', 'waivio_guest_create', 'waivio_guest_reblog', 'waivio_guest_account_update' ],
     comment: [ 'waivio_guest_comment' ],
-    api: [ 'waivio_guest_update' ]
+    api: [ 'waivio_guest_update' ],
+    transfer: [ 'waivio_guest_transfer' ]
 };
