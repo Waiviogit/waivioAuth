@@ -19,6 +19,9 @@ module.exports = {
             host: '157.230.93.18',
             ref: 'origin/master',
             repo: 'git@github.com:Waiviogit/waivioAuth.git',
+            'env': {
+                'NODE_ENV': 'production'
+            },
             path: '/home/admin/waivio-auth',
             'post-deploy': 'npm install && pm2 startOrRestart ecosystem.config.js --env production'
         },
