@@ -2,7 +2,6 @@ const jwt = require( 'jsonwebtoken' );
 const { ObjectID } = require( 'bson' );
 const crypto = require( 'crypto-js' );
 const { uuid } = require('uuidv4');
-const _ = require( 'lodash' );
 const config = require( '../../config' );
 const { User } = require( '../../database' ).models;
 const { destroySession } = require( '../../models/userModel' );

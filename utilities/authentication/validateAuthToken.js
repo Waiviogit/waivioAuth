@@ -17,7 +17,6 @@ const verifyAuthToken = async ( req, res, next ) => {
 
                 if( !result ) return render.unauthorized( res );
                 return next();
-
             }
             await Sessions.removeAuthSession( { user_id: doc._id, session: payload } );
             return render.unauthorized( res );

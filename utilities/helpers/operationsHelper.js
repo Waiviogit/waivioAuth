@@ -1,4 +1,3 @@
-const _ = require( 'lodash' );
 const Requests = require( './api/requests' );
 const { actionUrls, guestActions } = require( '../../config/constants' );
 

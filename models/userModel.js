@@ -1,5 +1,4 @@
 const jwt = require( 'jsonwebtoken' );
-const _ = require( 'lodash' );
 const crypto = require( 'crypto-js' );
 const config = require( '../config' );
 const Requests = require( '../utilities/helpers/api/requests' );
