@@ -50,7 +50,8 @@ describe( 'userModel', async () => {
             const metadata = { profile: {
                 name: socialName,
                 profile_image: 'image_url',
-                facebook: id
+                facebook: null
+                // facebook: id
             } };
 
             expect( result ).to.have.all.keys( 'user', 'session' );
@@ -72,7 +73,8 @@ describe( 'userModel', async () => {
             const metadata = { profile: {
                 name: socialName,
                 profile_image: null,
-                facebook: id
+                // facebook: id
+                facebook: null
             } };
 
             expect( result ).to.have.all.keys( 'user', 'session' );
@@ -195,7 +197,8 @@ describe( 'userModel', async () => {
             provider = 'facebook';
             const result = await generateSocialLink( { provider, id, socialName } );
 
-            expect( result ).to.be.eq( id );
+            // expect( result ).to.be.eq( id );
+            expect( result ).to.be.eq( null );
         } );
 
         it( 'get instagram link', async() => {
