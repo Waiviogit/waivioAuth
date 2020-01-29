@@ -4,12 +4,21 @@ const Auth = require( '../../utilities/authentication/auth' );
 
 require( '../../utilities/authentication/passport' )( passport );
 
+const updateUserData = ( avatar, alias, postLocales, socialFields ) => {
+    socialFields.avatar = avatar ? avatar : socialFields.avatar;
+    socialFields.socialName = alias ? alias : socialFields.socialName;
+    socialFields.postLocales = postLocales;
+
+    return socialFields;
+};
+
 exports.socialStrategy = async( req, res, next ) => {
-    const { userName, pickSocialFields } = req.body;
+    const { userName, avatar, alias, locales } = req.body;
     const provider = req.route.path.match( /[a-z].*/ )[ 0 ];
     const socialFields = await pickSocialData( { passport, provider, req, res, next } );
 
-    return await Auth.socialAuth( Object.assign( socialFields, { userName, pickSocialFields } ) );
+    return await Auth.socialAuth(
+        Object.assign( updateUserData( avatar, alias, locales, socialFields ), { userName } ) );
 };
 
 const pickSocialData = async( { passport, provider, req, res, next } ) => {

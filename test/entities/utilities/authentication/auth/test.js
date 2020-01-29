@@ -1,4 +1,4 @@
-const { expect, models, sinon, dropDatabase, AuthenticationModule, ObjectID, crypto, OperationsHelper, Requests } = require( '../../../../testHelper' );
+const { expect, sinon, dropDatabase, AuthenticationModule, ObjectID, crypto, OperationsHelper, Requests } = require( '../../../../testHelper' );
 const { UserFactory } = require( '../../../../factories' );
 
 describe( 'auth', async () => {
@@ -32,12 +32,11 @@ describe( 'auth', async () => {
             expect( session ).to.be.exist;
             expect( message ).to.be.undefined;
             expect( user.auth.sessions.length ).to.be.eq( 1 );
-            expect( user.json_metadata ).to.be.eq( '' );
             expect( user.auth.provider ).to.be.eq( provider );
             expect( user.auth.sessions[ 0 ].sid ).to.be.eql( session.sid.toString() );
             expect( user.auth.sessions[ 0 ].secret_token ).to.be.eq( session.secret_token );
             expect( user.name ).to.be.eq( userName );
-            expect( user.alias ).to.be.undefined ;
+            expect( user.alias ).to.be.eq( socialName ) ;
         } );
 
         it( 'check sign up with true pickSocialFields', async () => {
