@@ -73,7 +73,6 @@ const signInSocial = async( { user_id, session } ) => {
 
 const generateSocialLink = ( { provider, id, socialName } ) => {
     switch ( provider ) {
-        //#TODO remove facebook id
         case 'facebook' :return null;
         case 'instagram' :return socialName;
         default :return null;

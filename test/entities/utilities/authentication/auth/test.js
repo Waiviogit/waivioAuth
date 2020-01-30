@@ -4,7 +4,7 @@ const { UserFactory } = require( '../../../../factories' );
 describe( 'auth', async () => {
 
     describe( 'socialAuth', async () => {
-        let userName, pickSocialFields, socialName, provider, avatar, id, new_session;
+        let userName, pickSocialFields, socialName, provider, avatar, id, new_session, postLocales;
 
         beforeEach( async () => {
             await dropDatabase();
@@ -14,6 +14,9 @@ describe( 'auth', async () => {
             provider = 'facebook';
             avatar = 'image_url';
             pickSocialFields = false;
+            postLocales = [ 'de-DE',
+                'et-EE',
+                'es-ES' ];
             new_session = {
                 sid: new ObjectID(),
                 secret_token: crypto.SHA512( `${new Date()}` ).toString()
@@ -24,6 +27,12 @@ describe( 'auth', async () => {
             sinon.restore();
         } );
 
+        it( 'should create user with post locales if it exists', async () => {
+            sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
+            const { user } = await AuthenticationModule.Auth.socialAuth( { userName, pickSocialFields, socialName, provider, avatar, id, postLocales } );
+
+            expect( user.user_metadata.settings.postLocales ).to.be.deep.eq( postLocales );
+        } );
         it( 'check sign up with valid data', async () => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
             const { user, session, message } = await AuthenticationModule.Auth.socialAuth( { userName, pickSocialFields, socialName, provider, avatar, id } );
