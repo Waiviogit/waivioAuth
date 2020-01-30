@@ -5,7 +5,7 @@ const {
     findUserByName } = require( '../../models/userModel' );
 const { generateSession } = require( './sessions' );
 
-exports.socialAuth = async( { userName, socialName, provider, avatar, id, postLocales } ) => {
+exports.socialAuth = async( { userName, alias, provider, avatar, id, postLocales } ) => {
     const userBySocial = await findUserBySocial( { id, provider } );
     const session = generateSession( );
 
@@ -13,7 +13,7 @@ exports.socialAuth = async( { userName, socialName, provider, avatar, id, postLo
         const userByName = await findUserByName( { name: userName } );
 
         if( userByName ) return { message: 'User exist' };
-        return await signUpSocial( { userName, socialName, avatar, provider, id, session, postLocales } );
+        return await signUpSocial( { userName, alias, avatar, provider, id, session, postLocales } );
     }
     if( !userBySocial ) return { message: 'Invalid data fields' };
     return await signInSocial( { id, user_id: userBySocial._id, session } );

@@ -7,13 +7,13 @@ const generateSocialLink = UserModelRewire.__get__( 'generateSocialLink' );
 
 describe( 'userModel', async () => {
     describe( 'signUpSocial', async () => {
-        let userName, socialName, provider, avatar, id, session;
+        let userName, alias, provider, avatar, id, session;
 
         beforeEach( async() => {
             await dropDatabase();
             id = new ObjectID().toString();
             userName = 'name';
-            socialName = 'socialName';
+            alias = 'alias';
             avatar = 'image_url';
             provider = 'facebook';
             session = {
@@ -29,7 +29,7 @@ describe( 'userModel', async () => {
         it( 'should be successfully sign up without metadata', async() => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
             sinon.stub( Requests, 'uploadAvatar' ).returns( Promise.resolve( null ) );
-            const result = await UserModel.signUpSocial( { userName, socialName, provider, avatar, id, session } );
+            const result = await UserModel.signUpSocial( { userName, alias, provider, avatar, id, session } );
             const user = await models.User.findOne( { name: userName } );
 
             expect( result ).to.have.all.keys( 'user', 'session' );
@@ -38,17 +38,17 @@ describe( 'userModel', async () => {
             expect( user.auth.sessions[ 0 ].sid ).to.be.eql( session.sid.toString() );
             expect( user.auth.sessions[ 0 ].secret_token ).to.be.eq( session.secret_token );
             expect( user.name ).to.be.eq( userName );
-            expect( user.alias ).to.be.eq( socialName ) ;
+            expect( user.alias ).to.be.eq( alias ) ;
         } );
 
         it( 'should be successfully sign up with metadata', async() => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
             sinon.stub( Requests, 'uploadAvatar' ).returns( Promise.resolve( 'image_url' ) );
             pickFields = true;
-            const result = await UserModel.signUpSocial( { userName, socialName, provider, avatar, id, session } );
+            const result = await UserModel.signUpSocial( { userName, alias, provider, avatar, id, session } );
             const user = await models.User.findOne( { name: userName } );
             const metadata = { profile: {
-                name: socialName,
+                name: alias,
                 profile_image: 'image_url',
                 facebook: null
                 // facebook: id
@@ -61,17 +61,17 @@ describe( 'userModel', async () => {
             expect( user.auth.sessions[ 0 ].sid ).to.be.eql( session.sid.toString() );
             expect( user.auth.sessions[ 0 ].secret_token ).to.be.eq( session.secret_token );
             expect( user.name ).to.be.eq( userName );
-            expect( user.alias ).to.be.eq( socialName ) ;
+            expect( user.alias ).to.be.eq( alias ) ;
         } );
 
         it( 'should be successfully sign up without avatar', async() => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
             sinon.stub( Requests, 'uploadAvatar' ).returns( Promise.resolve( null ) );
             pickFields = true;
-            const result = await UserModel.signUpSocial( { userName, socialName, provider, avatar: null, id, session } );
+            const result = await UserModel.signUpSocial( { userName, alias, provider, avatar: null, id, session } );
             const user = await models.User.findOne( { name: userName } );
             const metadata = { profile: {
-                name: socialName,
+                name: alias,
                 profile_image: null,
                 // facebook: id
                 facebook: null
@@ -84,13 +84,13 @@ describe( 'userModel', async () => {
             expect( user.auth.sessions[ 0 ].sid ).to.be.eql( session.sid.toString() );
             expect( user.auth.sessions[ 0 ].secret_token ).to.be.eq( session.secret_token );
             expect( user.name ).to.be.eq( userName );
-            expect( user.alias ).to.be.eq( socialName ) ;
+            expect( user.alias ).to.be.eq( alias ) ;
         } );
 
         it( 'should return error', async() => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
             sinon.stub( Requests, 'uploadAvatar' ).returns( Promise.resolve( null ) );
-            const { message } = await UserModel.signUpSocial( { socialName, provider, avatar, id, session } );
+            const { message } = await UserModel.signUpSocial( { alias, provider, avatar, id, session } );
 
             expect( message ).to.be.exist;
         } );
@@ -98,7 +98,7 @@ describe( 'userModel', async () => {
         it( 'should return error with object bot error', async() => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { message: 'Some error' } ) );
             sinon.stub( Requests, 'uploadAvatar' ).returns( Promise.resolve( null ) );
-            const { message } = await UserModel.signUpSocial( { userName, socialName, provider, avatar, id, session } );
+            const { message } = await UserModel.signUpSocial( { userName, alias, provider, avatar, id, session } );
 
             expect( message ).to.be.eq( 'Some error' );
         } );
@@ -186,16 +186,16 @@ describe( 'userModel', async () => {
         } );
     } );
     describe( 'generateSocialLink', async () => {
-        let provider, id, socialName;
+        let provider, id, alias;
 
         beforeEach( async() => {
             id = new ObjectID();
-            socialName = 'socialName';
+            alias = 'alias';
         } );
 
         it( 'get facebook link', async() => {
             provider = 'facebook';
-            const result = await generateSocialLink( { provider, id, socialName } );
+            const result = await generateSocialLink( { provider, id, alias } );
 
             // expect( result ).to.be.eq( id );
             expect( result ).to.be.eq( null );
@@ -203,9 +203,9 @@ describe( 'userModel', async () => {
 
         it( 'get instagram link', async() => {
             provider = 'instagram';
-            const result = await generateSocialLink( { provider, id, socialName } );
+            const result = await generateSocialLink( { provider, id, alias } );
 
-            expect( result ).to.be.eq( socialName );
+            expect( result ).to.be.eq( alias );
         } );
 
         it( 'should return null', async() => {
