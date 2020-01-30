@@ -7,14 +7,13 @@ const generateSocialLink = UserModelRewire.__get__( 'generateSocialLink' );
 
 describe( 'userModel', async () => {
     describe( 'signUpSocial', async () => {
-        let userName, pickFields, socialName, provider, avatar, id, session;
+        let userName, socialName, provider, avatar, id, session;
 
         beforeEach( async() => {
             await dropDatabase();
             id = new ObjectID().toString();
             userName = 'name';
             socialName = 'socialName';
-            pickFields = undefined;
             avatar = 'image_url';
             provider = 'facebook';
             session = {
@@ -30,24 +29,23 @@ describe( 'userModel', async () => {
         it( 'should be successfully sign up without metadata', async() => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
             sinon.stub( Requests, 'uploadAvatar' ).returns( Promise.resolve( null ) );
-            const result = await UserModel.signUpSocial( { userName, pickFields, socialName, provider, avatar, id, session } );
+            const result = await UserModel.signUpSocial( { userName, socialName, provider, avatar, id, session } );
             const user = await models.User.findOne( { name: userName } );
 
             expect( result ).to.have.all.keys( 'user', 'session' );
             expect( user.auth.sessions.length ).to.be.eq( 1 );
-            expect( user.json_metadata ).to.be.eq( '' );
             expect( user.auth.provider ).to.be.eq( provider );
             expect( user.auth.sessions[ 0 ].sid ).to.be.eql( session.sid.toString() );
             expect( user.auth.sessions[ 0 ].secret_token ).to.be.eq( session.secret_token );
             expect( user.name ).to.be.eq( userName );
-            expect( user.alias ).to.be.undefined ;
+            expect( user.alias ).to.be.eq( socialName ) ;
         } );
 
         it( 'should be successfully sign up with metadata', async() => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
             sinon.stub( Requests, 'uploadAvatar' ).returns( Promise.resolve( 'image_url' ) );
             pickFields = true;
-            const result = await UserModel.signUpSocial( { userName, pickFields, socialName, provider, avatar, id, session } );
+            const result = await UserModel.signUpSocial( { userName, socialName, provider, avatar, id, session } );
             const user = await models.User.findOne( { name: userName } );
             const metadata = { profile: {
                 name: socialName,
@@ -70,7 +68,7 @@ describe( 'userModel', async () => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
             sinon.stub( Requests, 'uploadAvatar' ).returns( Promise.resolve( null ) );
             pickFields = true;
-            const result = await UserModel.signUpSocial( { userName, pickFields, socialName, provider, avatar: null, id, session } );
+            const result = await UserModel.signUpSocial( { userName, socialName, provider, avatar: null, id, session } );
             const user = await models.User.findOne( { name: userName } );
             const metadata = { profile: {
                 name: socialName,
@@ -81,7 +79,7 @@ describe( 'userModel', async () => {
 
             expect( result ).to.have.all.keys( 'user', 'session' );
             expect( user.auth.sessions.length ).to.be.eq( 1 );
-            expect( user.json_metadata ).to.be.eql( JSON.stringify( metadata ) );
+            expect( user.json_metadata ).to.be.deep.eq( JSON.stringify( metadata ) );
             expect( user.auth.provider ).to.be.eq( provider );
             expect( user.auth.sessions[ 0 ].sid ).to.be.eql( session.sid.toString() );
             expect( user.auth.sessions[ 0 ].secret_token ).to.be.eq( session.secret_token );
@@ -92,7 +90,7 @@ describe( 'userModel', async () => {
         it( 'should return error', async() => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
             sinon.stub( Requests, 'uploadAvatar' ).returns( Promise.resolve( null ) );
-            const { message } = await UserModel.signUpSocial( { pickFields, socialName, provider, avatar, id, session } );
+            const { message } = await UserModel.signUpSocial( { socialName, provider, avatar, id, session } );
 
             expect( message ).to.be.exist;
         } );
@@ -100,7 +98,7 @@ describe( 'userModel', async () => {
         it( 'should return error with object bot error', async() => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { message: 'Some error' } ) );
             sinon.stub( Requests, 'uploadAvatar' ).returns( Promise.resolve( null ) );
-            const { message } = await UserModel.signUpSocial( { userName, pickFields, socialName, provider, avatar, id, session } );
+            const { message } = await UserModel.signUpSocial( { userName, socialName, provider, avatar, id, session } );
 
             expect( message ).to.be.eq( 'Some error' );
         } );
