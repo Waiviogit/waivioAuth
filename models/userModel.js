@@ -41,7 +41,7 @@ const signUpSocial = async( { userName, socialName, provider, avatar, id, sessio
         'auth.id': id
     } );
 
-    if( postLocales ) user.user_metadata.settings.postLocales = postLocales;
+    user.user_metadata.settings.postLocales = postLocales;
 
     try{
         await user.save();

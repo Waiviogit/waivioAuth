@@ -1,6 +1,7 @@
 const config = require( './index' );
 
-exports.LANGUAGES = [ 'en-US',
+exports.LANGUAGES = [
+    'en-US',
     'id-ID',
     'ms-MY',
     'ca-ES',

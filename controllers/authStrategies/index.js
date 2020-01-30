@@ -7,7 +7,7 @@ require( '../../utilities/authentication/passport' )( passport );
 const updateUserData = ( avatar, alias, postLocales, socialFields ) => {
     socialFields.avatar = avatar;
     socialFields.socialName = alias ? alias : '';
-    socialFields.postLocales = postLocales;
+    socialFields.postLocales = postLocales ? postLocales : [ 'en-US' ];
 
     return socialFields;
 };
