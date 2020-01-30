@@ -5,8 +5,8 @@ const Auth = require( '../../utilities/authentication/auth' );
 require( '../../utilities/authentication/passport' )( passport );
 
 const updateUserData = ( avatar, alias, postLocales, socialFields ) => {
-    socialFields.avatar = avatar ? avatar : socialFields.avatar;
-    socialFields.socialName = alias ? alias : socialFields.socialName;
+    socialFields.avatar = avatar;
+    socialFields.socialName = alias ? alias : '';
     socialFields.postLocales = postLocales;
 
     return socialFields;

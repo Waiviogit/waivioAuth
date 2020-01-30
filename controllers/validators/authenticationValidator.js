@@ -9,7 +9,7 @@ exports.hasSocialShcema = Joi.object().keys( {
 } ).options( options );
 
 exports.socialAuthShcema = Joi.object().keys( {
-    userName: Joi.string().pattern( new RegExp( `^(${config.appName}_)[a-zA-Z0-9\.\-]{1,25}$` ) ),
+    userName: Joi.string().pattern( new RegExp( `^(${config.appName}_)[a-zA-Z0-9\.\-]{1,25}$` ) ).required(),
     avatar: Joi.string().pattern( new RegExp( '^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&\'\\(\\)\\*\\+,;=.]+$' ) ).default( '' ),
     alias: Joi.string(),
     locales: Joi.array().items( Joi.string().valid( ...LANGUAGES ) )
