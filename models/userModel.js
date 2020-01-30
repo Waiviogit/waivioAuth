@@ -23,15 +23,13 @@ const findUserByName = async( { name } ) => {
     return await User.findOne( { name } );
 };
 
-const signUpSocial = async( { userName, pickFields, socialName, provider, avatar, id, session } ) => {
-    let metadata, alias;
+const signUpSocial = async( { userName, alias, provider, avatar, id, session, postLocales } ) => {
+    let metadata;
 
     if( avatar ) avatar = await Requests.uploadAvatar( { userName, imageUrl: avatar } );
 
-    if( pickFields ) {
-        metadata = { profile: { name: socialName, profile_image: avatar, [ provider ]: generateSocialLink( { provider, id, socialName } ) } };
-        alias = socialName;
-    }
+    metadata = { profile: { name: alias, profile_image: avatar, [ provider ]: generateSocialLink( { provider, id, alias } ) } };
+
     const user = new User( {
         name: userName,
         json_metadata: metadata ? JSON.stringify( metadata ) : '',
@@ -40,6 +38,8 @@ const signUpSocial = async( { userName, pickFields, socialName, provider, avatar
         'auth.provider': provider,
         'auth.id': id
     } );
+
+    user.user_metadata.settings.postLocales = postLocales;
 
     try{
         await user.save();
@@ -69,11 +69,10 @@ const signInSocial = async( { user_id, session } ) => {
     return{ user: user, session };
 };
 
-const generateSocialLink = ( { provider, id, socialName } ) => {
+const generateSocialLink = ( { provider, id, alias } ) => {
     switch ( provider ) {
-        //#TODO remove facebook id
         case 'facebook' :return null;
-        case 'instagram' :return socialName;
+        case 'instagram' :return alias;
         default :return null;
     }
 };

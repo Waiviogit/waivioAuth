@@ -4,6 +4,7 @@ const swaggerUi = require( 'swagger-ui-express' );
 const swaggerDocument = require( './swagger/swagger.json' );
 const Sentry = require( '@sentry/node' );
 
+
 module.exports = function( app, express ) {
     if( process.env.NODE_ENV === 'staging' ) {
         Sentry.init( { dsn: 'https://d0c3688cfc0543d8a6246a1865a8b44b@sentry.io/1860908' } );

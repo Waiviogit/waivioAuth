@@ -16,5 +16,5 @@ const getSocialFields = async( accessToken, refreshToken, profile, next ) => {
     const { id, name, picture } = profile._json;
     const avatar = picture || profile.photos && profile.photos[ 0 ].value;
 
-    next( { fields: { socialName: name, provider, avatar, id } } );
+    next( { fields: { alias: name, provider, avatar, id } } );
 };

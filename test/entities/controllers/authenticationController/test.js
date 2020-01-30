@@ -32,14 +32,14 @@ describe( 'Authorization', async () => {
             sinon.restore();
         } );
         it( 'should not authorize with invalid token', async () => {
-            const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token' } );
+            const result = await chai.request( app ).post( '/auth/facebook' ).send( { userName: userName, access_token: 'some_token' } );
 
             result.should.have.status( 401 );
             expect( result.headers[ 'access-token' ] ).to.be.undefined;
         } );
 
         it( 'should not authorize without token', async () => {
-            const result = await chai.request( app ).post( '/auth/facebook' ).send( { } );
+            const result = await chai.request( app ).post( '/auth/facebook' ).send( {userName: userName } );
 
             result.should.have.status( 401 );
             expect( result.headers[ 'access-token' ] ).to.be.undefined;
@@ -48,7 +48,7 @@ describe( 'Authorization', async () => {
         it( 'should authorize with valid token', async () => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
             sinon.stub( AuthStrategies, 'socialStrategy' ).returns( Promise.resolve( { user, session } ) );
-            const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token' } );
+            const result = await chai.request( app ).post( '/auth/facebook' ).send( { userName: userName, access_token: 'some_token' } );
 
             result.should.have.status( 200 );
             expect( result.headers[ 'access-token' ] ).to.be.exist;
@@ -97,7 +97,7 @@ describe( 'Authorization', async () => {
         it( 'check access_token', async () => {
             sinon.stub( OperationsHelper, 'transportAction' ).returns( Promise.resolve( { success: true } ) );
             sinon.stub( AuthStrategies, 'socialStrategy' ).returns( Promise.resolve( { user, session } ) );
-            const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token' } );
+            const result = await chai.request( app ).post( '/auth/facebook' ).send( { userName: userName, access_token: 'some_token' } );
             const token = await AuthenticationModule.TokenSalt.decodeToken( { access_token: result.headers[ 'access-token' ] } );
             const decoded_token = jwt.decode( token );
 
@@ -107,7 +107,7 @@ describe( 'Authorization', async () => {
 
         it( 'check auth in view', async () => {
             sinon.stub( AuthStrategies, 'socialStrategy' ).returns( Promise.resolve( { user: user.toObject(), session } ) );
-            const result = await chai.request( app ).post( '/auth/facebook' ).send( { access_token: 'some_token' } );
+            const result = await chai.request( app ).post( '/auth/facebook' ).send( {userName: userName, access_token: 'some_token' } );
 
             expect( result.body.user.auth ).to.be.undefined;
         } );
