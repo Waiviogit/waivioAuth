@@ -10,8 +10,8 @@ exports.hasSocialShcema = Joi.object().keys( {
 
 exports.socialAuthShcema = Joi.object().keys( {
     userName: Joi.string().pattern( new RegExp( `^(${config.appName}_)[a-zA-Z0-9\.\-]{1,25}$` ) ),
-    avatar: Joi.string().pattern( new RegExp( '^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&\'\\(\\)\\*\\+,;=.]+$' ) ).default( '' ),
-    alias: Joi.string(),
+    avatar: Joi.string().pattern( new RegExp( '^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&\'\\(\\)\\*\\+,;=.]+$' ) ).allow( '' ).default( '' ),
+    alias: Joi.string().allow( '' ),
     locales: Joi.array().items( Joi.string().valid( ...LANGUAGES ) )
 } ).unknown( true );
 
