@@ -54,7 +54,8 @@ const UserSchema = new Schema( {
     count_posts: { type: Number, default: 0, index: true }, // count of the all posts
     last_posts_count: { type: Number, default: 0 }, // count of the posts written in last day
     user_metadata: { type: UserMetadataSchema, default: () => ( {} ), select: false },
-    auth: { type: UserAuthSchema }
+    auth: { type: UserAuthSchema },
+    new_user: { type: Boolean, default: true }
 }, { timestamps: true } );
 
 UserSchema.index( { wobjects_weight: -1 } );
