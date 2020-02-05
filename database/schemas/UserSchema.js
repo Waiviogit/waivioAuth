@@ -42,7 +42,8 @@ const UserMetadataSchema = new Schema( {
             reward: { type: String }
         } ],
         default: []
-    }
+    },
+    new_user: { type: Boolean, default: true }
 } );
 const UserSchema = new Schema( {
     name: { type: String, index: true, unique: true, required: true },
