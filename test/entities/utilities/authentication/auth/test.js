@@ -55,8 +55,8 @@ describe( 'auth', async () => {
             const { user, session, message } = await AuthenticationModule.Auth.socialAuth( { userName, pickSocialFields, alias, provider, avatar, id } );
             const metadata = { profile: {
                 name: alias,
-                profile_image: 'image_url',
-                facebook: null
+                profile_image: 'image_url'
+                // facebook: null
                 // facebook: id
             } };
 

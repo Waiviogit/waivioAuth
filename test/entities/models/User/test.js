@@ -2,8 +2,8 @@ const { expect, models, dropDatabase, UserModel, ObjectID, crypto, sinon, Operat
 const { UserFactory } = require( '../../../factories' );
 
 const rewire = require( 'rewire' );
-const UserModelRewire = rewire( '../../../../models/userModel' );
-const generateSocialLink = UserModelRewire.__get__( 'generateSocialLink' );
+// const UserModelRewire = rewire( '../../../../models/userModel' );
+// const generateSocialLink = UserModelRewire.__get__( 'generateSocialLink' );
 
 describe( 'userModel', async () => {
     describe( 'signUpSocial', async () => {
@@ -50,7 +50,7 @@ describe( 'userModel', async () => {
             const metadata = { profile: {
                 name: alias,
                 profile_image: 'image_url',
-                facebook: null
+                // facebook: null
                 // facebook: id
             } };
 
@@ -74,7 +74,7 @@ describe( 'userModel', async () => {
                 name: alias,
                 profile_image: null,
                 // facebook: id
-                facebook: null
+                // facebook: null
             } };
 
             expect( result ).to.have.all.keys( 'user', 'session' );
@@ -185,36 +185,36 @@ describe( 'userModel', async () => {
             expect( result ).to.be.null;
         } );
     } );
-    describe( 'generateSocialLink', async () => {
-        let provider, id, alias;
-
-        beforeEach( async() => {
-            id = new ObjectID();
-            alias = 'alias';
-        } );
-
-        it( 'get facebook link', async() => {
-            provider = 'facebook';
-            const result = await generateSocialLink( { provider, id, alias } );
-
-            // expect( result ).to.be.eq( id );
-            expect( result ).to.be.eq( null );
-        } );
-
-        it( 'get instagram link', async() => {
-            provider = 'instagram';
-            const result = await generateSocialLink( { provider, id, alias } );
-
-            expect( result ).to.be.eq( alias );
-        } );
-
-        it( 'should return null', async() => {
-            const result = await generateSocialLink( { provider: 'aa', id } );
-
-            expect( result ).to.be.null;
-        } );
-
-    } );
+    // describe( 'generateSocialLink', async () => {
+    //     let provider, id, alias;
+    //
+    //     beforeEach( async() => {
+    //         id = new ObjectID();
+    //         alias = 'alias';
+    //     } );
+    //
+    //     it( 'get facebook link', async() => {
+    //         provider = 'facebook';
+    //         const result = await generateSocialLink( { provider, id, alias } );
+    //
+    //         // expect( result ).to.be.eq( id );
+    //         expect( result ).to.be.eq( null );
+    //     } );
+    //
+    //     it( 'get instagram link', async() => {
+    //         provider = 'instagram';
+    //         const result = await generateSocialLink( { provider, id, alias } );
+    //
+    //         expect( result ).to.be.eq( alias );
+    //     } );
+    //
+    //     it( 'should return null', async() => {
+    //         const result = await generateSocialLink( { provider: 'aa', id } );
+    //
+    //         expect( result ).to.be.null;
+    //     } );
+    //
+    // } );
     describe( 'destroySession', async () => {
         let user, session;
 

@@ -28,7 +28,7 @@ const signUpSocial = async( { userName, alias, provider, avatar, id, session, po
 
     if( avatar ) avatar = await Requests.uploadAvatar( { userName, imageUrl: avatar } );
 
-    metadata = { profile: { name: alias, profile_image: avatar, [ provider ]: generateSocialLink( { provider, id, alias } ) } };
+    metadata = { profile: { name: alias, profile_image: avatar } };
 
     const user = new User( {
         name: userName,
@@ -69,13 +69,13 @@ const signInSocial = async( { user_id, session } ) => {
     return{ user: user, session };
 };
 
-const generateSocialLink = ( { provider, id, alias } ) => {
-    switch ( provider ) {
-        case 'facebook' :return null;
-        case 'instagram' :return alias;
-        default :return null;
-    }
-};
+// const generateSocialLink = ( { provider, id, alias } ) => {
+//     switch ( provider ) {
+//         case 'facebook' :return null;
+//         case 'instagram' :return alias;
+//         default :return null;
+//     }
+// };
 
 const userObjectCreate = ( { userId, displayName, json_metadata, access_token } ) => {
     return { params: { id: 'waivio_guest_create', json: { userId, displayName, json_metadata } }, access_token };
