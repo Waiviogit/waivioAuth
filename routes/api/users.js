@@ -3,7 +3,7 @@ const { AuthenticationController } = require( '../../controllers' );
 const router = require( 'express' ).Router();
 const { validateAuthToken } = require( '../../utilities/authentication/validateAuthToken' );
 
-
+router.route( '/beaxy' ).post( AuthenticationController.beaxySignIn );
 router.route( '/facebook' ).post( AuthenticationController.socialSignIn );
 router.route( '/instagram' ).post( AuthenticationController.socialSignIn );
 router.route( '/google' ).post( AuthenticationController.socialSignIn );

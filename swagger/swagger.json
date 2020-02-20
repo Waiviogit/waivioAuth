@@ -1,7 +1,9 @@
 {
   "swagger": "2.0",
   "host": "waiviodev.com/",
-  "schemes": ["https"],
+  "schemes": [
+    "https"
+  ],
   "info": {
     "version": "0.0.1",
     "title": "Waivio auth service",
@@ -14,7 +16,9 @@
         "tags": [
           "Auth"
         ],
-        "produces": [ "application/json" ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -22,16 +26,106 @@
             "description": "facebook access_token",
             "type": "string",
             "required": true
-          }],
+          }
+        ],
         "responses": {
           "200": {
             "description": "User data",
             "examples": {
-              "data": {"user": "user data" }
+              "data": {
+                "user": "user data"
+              }
             }
           },
           "401": {
             "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/beaxy": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "description": "Auth by beaxy(if authBy - credentials => use {user: , password: } in authData. 2fa=> {token2fa: , code: , user: })",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/auth_beaxy"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "2fa auth needed",
+            "schema": {
+              "example": {
+                "admin": {
+                  "code": 321,
+                  "response": "TWO_FA_VERIFICATION_NEEDED",
+                  "payload": {
+                    "token2fa": "0fce19045e0f460c9943c586f6117fdc"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "success (code 200!!!)",
+            "headers": {
+              "access-token": {
+                "type": "string",
+                "description": "access-token"
+              },
+              "expires-in": {
+                "type": "number"
+              },
+              "um_session": {
+                "type": "string"
+              },
+              "um_session_exp": {
+                "type": "number"
+              }
+            },
+            "schema": {
+              "example": {
+                "user": {
+                  "_id": "5e4e91b73b3102381e41d037",
+                  "objects_follow": [],
+                  "users_follow": [],
+                  "json_metadata": "{\"profile\":{\"name\":\"investarena\",\"profile_image\":null}}",
+                  "wobjects_weight": 0,
+                  "count_posts": 0,
+                  "last_posts_count": 0,
+                  "name": "bxy_",
+                  "alias": "investarena",
+                  "createdAt": "2020-02-20T14:03:35.632Z",
+                  "updatedAt": "2020-02-20T14:46:47.921Z",
+                  "__v": 0
+                },
+                "payload": {
+                  "crmToken": "fghfghgfhfhgfhdg",
+                  "sessionId": "476b0205-4b75-4696-b584-82c2761efe10",
+                  "stompUser": "gfhdgfhdgfhhdgfhdfghdfhfsd",
+                  "stompPassword": "sdfdsfdsfdsfdsfsgdfg"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "example": {
+                "message": "2fa token not provided"
+              }
+            }
           }
         }
       }
@@ -41,7 +135,9 @@
         "tags": [
           "Auth"
         ],
-        "produces": [ "application/json" ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -49,12 +145,15 @@
             "description": "instagram access_token",
             "type": "string",
             "required": true
-          }],
+          }
+        ],
         "responses": {
           "200": {
             "description": "User data",
             "examples": {
-              "data": {"user": "user data" }
+              "data": {
+                "user": "user data"
+              }
             }
           },
           "401": {
@@ -68,7 +167,9 @@
         "tags": [
           "Auth"
         ],
-        "produces": [ "application/json" ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -76,12 +177,15 @@
             "description": "google access_token",
             "type": "string",
             "required": true
-          }],
+          }
+        ],
         "responses": {
           "200": {
             "description": "User data",
             "examples": {
-              "data": {"user": "user data" }
+              "data": {
+                "user": "user data"
+              }
             }
           },
           "401": {
@@ -95,7 +199,9 @@
         "tags": [
           "Auth"
         ],
-        "produces": [ "application/json" ],
+        "produces": [
+          "application/json"
+        ],
         "description": "Send access-token in headers. If token expired and valid, a new access token will respond. Auth headers are: 'access-token, expires-in, waivio-auth",
         "parameters": [
           {
@@ -104,12 +210,15 @@
             "description": "user access_token",
             "type": "string",
             "required": true
-          }],
+          }
+        ],
         "responses": {
           "200": {
             "description": "User data with auth headers",
             "examples": {
-              "data": {"user": "user data" }
+              "data": {
+                "user": "user data"
+              }
             }
           },
           "401": {
@@ -123,7 +232,9 @@
         "tags": [
           "Operation"
         ],
-        "produces": [ "application/json" ],
+        "produces": [
+          "application/json"
+        ],
         "description": "Transport to waivio services guest actions",
         "parameters": [
           {
@@ -146,7 +257,11 @@
             "in": "body",
             "description": "data of request",
             "type": "string",
-            "example": {"data":{"some_key":"some_value"}},
+            "example": {
+              "data": {
+                "some_key": "some_value"
+              }
+            },
             "required": true
           },
           {
@@ -155,12 +270,15 @@
             "description": "user name",
             "type": "string",
             "required": false
-          }],
+          }
+        ],
         "responses": {
           "any_status": {
             "description": "Any data from services",
             "examples": {
-              "data": {"user": "user data" }
+              "data": {
+                "user": "user data"
+              }
             }
           },
           "401": {
@@ -174,7 +292,9 @@
         "tags": [
           "Auth"
         ],
-        "produces": [ "application/json" ],
+        "produces": [
+          "application/json"
+        ],
         "description": "Check demo user authorize",
         "parameters": [
           {
@@ -198,7 +318,9 @@
           "200": {
             "description": "Success",
             "examples": {
-              "data": {"user": "user data" }
+              "data": {
+                "user": "user data"
+              }
             }
           }
         }
@@ -206,5 +328,31 @@
     }
   },
   "definitions": {
+    "auth_beaxy": {
+      "type": "object",
+      "properties": {
+        "authBy": {
+          "type": "string",
+          "enum": ["2fa", "credentials"]
+        },
+        "authData": {
+          "type": "object",
+          "properties": {
+            "token2fa": {
+              "type": "string"
+            },
+            "code": {
+              "type": "number"
+            },
+            "user": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
   }
 }

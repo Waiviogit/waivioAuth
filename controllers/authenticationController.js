@@ -1,4 +1,4 @@
-const { signInView, validateAuthTokenView, hasSocialView } = require( '../views/authenticationController' );
+const { signInView, validateAuthTokenView, hasSocialView, beaxySignInView } = require( '../views/authenticationController' );
 const render = require( '../concerns/render' );
 const { UserModel } = require( '../models' );
 const { setAuthHeaders } = require( '../utilities/authentication/sessions' );
@@ -31,8 +31,21 @@ const hasSocialAccount = async ( req, res ) => {
     return render.success( res, hasSocialView( { result: !!result } ) );
 };
 
+const beaxySignIn = async ( req, res ) => {
+    const { validation_error, params } = validators.validate( req.body, validators.authentication.socialBeaxySchema );
+
+    if ( validation_error ) return render.error( res, validation_error );
+    const { user, session, message, beaxyPayload } = await Strategies.beaxyStrategy( params, res );
+
+    if( message ) return render.unauthorized( res, message );
+    if( !session || !user )return;
+    setAuthHeaders( res, user, session );
+    return render.success( res, beaxySignInView( { user, beaxyPayload } ) );
+};
+
 module.exports = {
     hasSocialAccount,
     socialSignIn,
-    validateAuthToken
+    validateAuthToken,
+    beaxySignIn
 };
