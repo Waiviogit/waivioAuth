@@ -55,4 +55,5 @@ exports.beaxyStrategy = async ( params, res ) => {
                 return { message: result.data.response };
         }
     }
+    return render.badGatteway( res );
 };

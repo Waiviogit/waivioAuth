@@ -39,7 +39,7 @@ const getUserFields = async ( email ) => {
     }
     return {
         id: crypto.SHA512( `${email}` ).toString(),
-        userName: 'bxy_',
+        userName: name,
         alias: email.split( '@' )[ 0 ],
         provider: 'beaxy',
         avatar: null,
