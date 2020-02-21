@@ -42,7 +42,6 @@ exports.beaxyStrategy = async ( params, res ) => {
                 const userFields = await Beaxy.getUserFields( params.authData.user );
                 if ( um_session ) {
                     res.setHeader( 'um_session', um_session.value );
-                    res.setHeader( 'um_session_exp', new Date( Math.round( um_session.expires ).valueOf() / 1000 ) );
                 }
                 const { user, session, message } = await Auth.socialAuth( userFields );
                 return { user, session, beaxyPayload: result.data.payload, message };

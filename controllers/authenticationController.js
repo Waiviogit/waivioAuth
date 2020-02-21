@@ -4,6 +4,7 @@ const { UserModel } = require( '../models' );
 const { setAuthHeaders } = require( '../utilities/authentication/sessions' );
 const validators = require( './validators' );
 const Strategies = require( './authStrategies' );
+const Beaxy = require( '../utilities/authentication/beaxy' );
 
 const socialSignIn = async ( req, res, next ) => {
     const { validation_error } = validators.validate( req.body, validators.authentication.socialAuthShcema );
@@ -43,9 +44,17 @@ const beaxySignIn = async ( req, res ) => {
     return render.success( res, beaxySignInView( { user, beaxyPayload } ) );
 };
 
+const keepAlive = async ( req, res, next ) => {
+    if ( !req.query.sid || !req.headers.um_session ) return render.error( res, 'sid and um_session is required' );
+    const { error } = await Beaxy.keepAlive( req.query.sid, req.headers.um_session, res );
+    if ( error ) return render.notFound( res, error );
+    next();
+};
+
 module.exports = {
     hasSocialAccount,
     socialSignIn,
     validateAuthToken,
-    beaxySignIn
+    beaxySignIn,
+    keepAlive
 };

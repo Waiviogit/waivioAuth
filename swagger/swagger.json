@@ -46,7 +46,7 @@
     "/beaxy": {
       "post": {
         "tags": [
-          "Auth"
+          "beaxyAuth"
         ],
         "produces": [
           "application/json"
@@ -88,10 +88,8 @@
                 "type": "number"
               },
               "um_session": {
+                "description": "um-session cookies",
                 "type": "string"
-              },
-              "um_session_exp": {
-                "type": "number"
               }
             },
             "schema": {
@@ -124,6 +122,51 @@
             "schema": {
               "example": {
                 "message": "2fa token not provided"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/keepalive": {
+      "get": {
+        "tags": [
+          "beaxyAuth"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "sid",
+            "in": "query",
+            "description": "beaxy session ID",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "um_session",
+            "in": "headers",
+            "description": "session cookies",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "result",
+            "schema": {
+              "example": {
+                  "result": "Ok"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+            "example": {
+                  "message": "Not found"
+
               }
             }
           }

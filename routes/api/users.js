@@ -9,5 +9,6 @@ router.route( '/instagram' ).post( AuthenticationController.socialSignIn );
 router.route( '/google' ).post( AuthenticationController.socialSignIn );
 router.route( '/has_social_account' ).get( AuthenticationController.hasSocialAccount );
 router.route( '/validate_auth_token' ).post( validateAuthToken, AuthenticationController.validateAuthToken );
+router.route( '/keepalive' ).get( AuthenticationController.keepAlive );
 
 module.exports = router;

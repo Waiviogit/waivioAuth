@@ -15,7 +15,7 @@
       "investarena": "ia",
       "beaxy": "bxy"
     },
-    "beaxyUrl": "https://uat-exchange.tokenexus.com/auth/v1",
+    "beaxyUrl": "https://uat-exchange.tokenexus.com",
     "beaxyPrefix": "tokenexus.."
   },
 
@@ -35,7 +35,7 @@
       "investarena": "ia",
       "beaxy": "bxy"
     },
-    "beaxyUrl": "https://uat-exchange.tokenexus.com/auth/v1",
+    "beaxyUrl": "https://uat-exchange.tokenexus.com",
     "beaxyPrefix": "tokenexus.."
   },
 
@@ -56,7 +56,7 @@
       "investarena": "ia",
       "beaxy": "bxy"
     },
-    "beaxyUrl": "https://uat-exchange.tokenexus.com/auth/v1",
+    "beaxyUrl": "https://uat-exchange.tokenexus.com",
     "beaxyPrefix": "tokenexus.."
   },
 
@@ -76,7 +76,7 @@
       "investarena": "ia",
       "beaxy": "bxy"
     },
-    "beaxyUrl": "https://uat-exchange.tokenexus.com/auth/v1",
+    "beaxyUrl": "https://uat-exchange.tokenexus.com",
     "beaxyPrefix": "tokenexus.."
   }
 }

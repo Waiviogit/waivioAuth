@@ -15,9 +15,10 @@ const beaxyAuth = async ( data ) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            url: `${config.beaxyUrl}${data.key}`,
+            url: `${config.beaxyUrl}/auth/v1${data.key}`,
             data: JSON.stringify( dataForReq )
         }, { withCredentials: true } );
+        // const um_session = _.get( result, 'headers.set-cookie' ) ? result.headers[ 'set-cookie' ][ 0 ] : null;
         const { um_session } = setCookie.parse( result, {
             decodeValues: true,
             map: true
@@ -47,4 +48,24 @@ const getUserFields = async ( email ) => {
     };
 };
 
-module.exports = { beaxyAuth, getUserFields };
+const keepAlive = async ( sid, session, res ) => {
+    try{
+        const result = await axios( {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json',
+                Cookie: `um_session=${session};`
+            },
+            url: `${config.beaxyUrl}/keepalive/?sid=${sid}&t=${new Date().valueOf()}`
+        }, { withCredentials: true } );
+
+        if ( result.status === 200 ) {
+            return res.status( 200 ).json( { result: 'ok' } );
+        }
+        return { error: { status: 404, message: 'Bad request' } };
+    }catch( error ) {
+        return { error: { message: error.response.statusText } };
+    }
+};
+
+module.exports = { beaxyAuth, getUserFields, keepAlive };
