@@ -128,7 +128,7 @@
         }
       }
     },
-    "/keepalive": {
+    "/beaxy_keepalive": {
       "get": {
         "tags": [
           "beaxyAuth"
