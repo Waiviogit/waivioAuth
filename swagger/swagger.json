@@ -67,13 +67,11 @@
             "description": "2fa auth needed",
             "schema": {
               "example": {
-                "admin": {
                   "code": 321,
                   "response": "TWO_FA_VERIFICATION_NEEDED",
                   "payload": {
                     "token2fa": "0fce19045e0f460c9943c586f6117fdc"
                   }
-                }
               }
             }
           },
