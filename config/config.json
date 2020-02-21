@@ -9,7 +9,14 @@
     "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
     "session_expiration": "10m",
     "waivioUrl": "https://www.waivio.com/",
-    "appName": "waivio"
+    "appName": "waivio",
+    "guestPrefixes": {
+      "waivio": "waivio",
+      "investarena": "ia",
+      "beaxy": "bxy"
+    },
+    "beaxyUrl": "https://uat-exchange.tokenexus.com",
+    "beaxyPrefix": "tokenexus.."
   },
 
   "staging" : {
@@ -22,7 +29,14 @@
     "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
     "session_expiration": "10m",
     "waivioUrl": "https://waiviodev.com/",
-    "appName": "waivio"
+    "appName": "waivio",
+    "guestPrefixes": {
+      "waivio": "waivio",
+      "investarena": "ia",
+      "beaxy": "bxy"
+    },
+    "beaxyUrl": "https://uat-exchange.tokenexus.com",
+    "beaxyPrefix": "tokenexus.."
   },
 
   "development": {
@@ -36,7 +50,14 @@
     "session_expiration": "1000",
     "waivioUrl": "http://localhost:3001/",
     "": "https://waiviodev.com/",
-    "appName": "waivio"
+    "appName": "waivio",
+    "guestPrefixes": {
+      "waivio": "waivio",
+      "investarena": "ia",
+      "beaxy": "bxy"
+    },
+    "beaxyUrl": "https://uat-exchange.tokenexus.com",
+    "beaxyPrefix": "tokenexus.."
   },
 
   "test": {
@@ -49,6 +70,13 @@
     "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
     "session_expiration": "2000",
     "waivioUrl": "https://test.waiviodev.com/",
-    "appName": "waivio"
+    "appName": "waivio",
+    "guestPrefixes": {
+      "waivio": "waivio",
+      "investarena": "ia",
+      "beaxy": "bxy"
+    },
+    "beaxyUrl": "https://uat-exchange.tokenexus.com",
+    "beaxyPrefix": "tokenexus.."
   }
 }

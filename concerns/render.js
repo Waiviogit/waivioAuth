@@ -21,10 +21,18 @@ const unauthorized = ( res, data ) => {
     } );
 };
 
+const badGatteway = ( res ) => {
+    return res.status( 503 ).send( {
+        success: false,
+        message: 'Bad request'
+    } );
+};
+
 module.exports = {
     custom,
     success,
     notFound,
     error,
-    unauthorized
+    unauthorized,
+    badGatteway
 };
