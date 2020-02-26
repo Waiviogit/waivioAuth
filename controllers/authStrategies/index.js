@@ -36,7 +36,7 @@ exports.beaxyStrategy = async ( params, res ) => {
         credentials: { ...params.authData }
     };
     const { result, um_session } = await Beaxy.beaxyAuth( { ...data } );
-    if ( result.status === 200 ) {
+    if ( result && result.status === 200 ) {
         switch( result.data.response ) {
             case 'SUCCESS' :
                 const userFields = await Beaxy.getUserFields( params.authData.user );
