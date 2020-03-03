@@ -18,6 +18,8 @@ const AuthStrategies = require( '../controllers/authStrategies' );
 const { mockRequest, mockResponse } = require( 'mock-req-res' );
 const api_prefix = '/waivio-auth';
 
+faker.getRandomString = ( length = 5 ) => faker.internet.password( length, false, /[a-z]/ );
+
 const dropDatabase = async () => {
     for( const model in models ) {
         await models[ model ].deleteMany();
