@@ -52,7 +52,7 @@ const keepAlive = async ( req, res, next ) => {
 };
 
 const createUser = async ( req, res ) => {
-    if ( !validators.keyValidator.validate( req.headers.API_KEY ) ) return render.unauthorized( res );
+    if ( !validators.keyValidator.validate( req.headers[ 'api-key' ] ) ) return render.unauthorized( res );
 
     const { validation_error, params } = validators.validate( req.body, validators.authentication.createUserSchema );
 
