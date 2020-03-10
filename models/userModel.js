@@ -63,7 +63,7 @@ const signUpSocial = async( { userName, alias, provider, avatar, id, session, po
 };
 
 const signInSocial = async( { user_id, session } ) => {
-    const user = await User.findOneAndUpdate( { _id: user_id }, { $push: { 'auth.sessions': session } }, { new: true } ).lean();
+    const user = await User.findOneAndUpdate( { _id: user_id }, { $push: { 'auth.sessions': session } }, { new: true, select: '+user_metadata' } ).lean();
 
     await destroyLastSession( { user } );
     return{ user: user, session };
