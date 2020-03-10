@@ -10,5 +10,6 @@ router.route( '/google' ).post( AuthenticationController.socialSignIn );
 router.route( '/has_social_account' ).get( AuthenticationController.hasSocialAccount );
 router.route( '/validate_auth_token' ).post( validateAuthToken, AuthenticationController.validateAuthToken );
 router.route( '/beaxy_keepalive' ).get( AuthenticationController.keepAlive );
+router.route( '/create_user' ).post( AuthenticationController.createUser );
 
 module.exports = router;

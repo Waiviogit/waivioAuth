@@ -4,6 +4,7 @@ module.exports = {
             name: 'waivio-auth',
             script: './bin/service.js',
             env: {
+                API_KEY: '49868f4a-9e89-4e3f-8b8a-0691730d42e0',
                 COMMON_VARIABLE: 'true',
                 PORT: '8004',
                 FACEBOOK_APP_ID: '754038848413420',

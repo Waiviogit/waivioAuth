@@ -51,10 +51,24 @@ const keepAlive = async ( req, res, next ) => {
     next();
 };
 
+const createUser = async ( req, res ) => {
+    if ( !validators.keyValidator.validate( req.headers.API_KEY ) ) return render.unauthorized( res );
+
+    const { validation_error, params } = validators.validate( req.body, validators.authentication.createUserSchema );
+
+    if ( validation_error ) return render.error( res, validation_error );
+    const { user, session, message } = await UserModel.signUpSocial( params );
+
+    if( message ) return render.error( res, message );
+    if( !session || !user )return;
+    return render.success( res, { result: true } );
+};
+
 module.exports = {
     hasSocialAccount,
     socialSignIn,
     validateAuthToken,
     beaxySignIn,
-    keepAlive
+    keepAlive,
+    createUser
 };

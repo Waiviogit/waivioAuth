@@ -16,7 +16,7 @@ exports.socialAuth = async( { userName, alias, provider, avatar, id, postLocales
         if( userByName ) return { message: 'User exist' };
         const { user, session: existSession, message } = await signUpSocial( { userName, alias, avatar, provider, id, session, postLocales } );
         if ( user && existSession ) {
-            signUpRequest( { userName, alias, provider, avatar, locales: postLocales } );
+            signUpRequest( { userName, alias, provider, avatar, postLocales, id, session } );
             return{ user, session: existSession };
         }
         return { message };

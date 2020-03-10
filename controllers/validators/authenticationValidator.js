@@ -30,3 +30,16 @@ exports.socialBeaxySchema = Joi.object().keys( {
         } )
     } )
 } );
+
+exports.createUserSchema = Joi.object().keys( {
+    userName: Joi.string().pattern( new RegExp( `^(${config.guestPrefixes.waivio}|${config.guestPrefixes.investarena}|${config.guestPrefixes.beaxy})_[a-zA-Z0-9\.\-]{1,25}$` ) ),
+    avatar: Joi.string().pattern( new RegExp( '^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&\'\\(\\)\\*\\+,;=.]+$' ) ).allow( '' ).default( '' ),
+    alias: Joi.string().allow( '' ),
+    postLocales: Joi.array().items( Joi.string().valid( ...LANGUAGES ) ).required(),
+    id: Joi.string().required(),
+    provider: Joi.string().required(),
+    session: Joi.object().keys( {
+        sid: Joi.string().required(),
+        secret_token: Joi.string().required()
+    } )
+} );
