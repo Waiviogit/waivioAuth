@@ -26,7 +26,7 @@ exports.socialBeaxySchema = Joi.object().keys( {
         otherwise: Joi.object().keys( {
             token2fa: Joi.string().required(),
             code: Joi.number().required(),
-            user: Joi.string().required(),
+            user: Joi.string().required()
         } )
     } )
 } );

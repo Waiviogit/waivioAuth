@@ -19,6 +19,7 @@ describe( 'Authorization', async () => {
         let user, name, alias, provider, session, userName;
 
         beforeEach( async () => {
+            sinon.stub( axios, 'post' ).returns( Promise.resolve( 'OK' ) );
             name = 'facebook|312321312';
             userName = 'waivio_username';
             alias = 'alias';

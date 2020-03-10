@@ -16,7 +16,8 @@
       "beaxy": "bxy"
     },
     "beaxyUrl": "https://uat-exchange.tokenexus.com",
-    "beaxyPrefix": "tokenexus.."
+    "beaxyPrefix": "tokenexus..",
+    "authUrl": "https://waiviodev.com/"
   },
 
   "staging" : {
@@ -36,7 +37,8 @@
       "beaxy": "bxy"
     },
     "beaxyUrl": "https://uat-exchange.tokenexus.com",
-    "beaxyPrefix": "tokenexus.."
+    "beaxyPrefix": "tokenexus..",
+    "authUrl": "https://www.waivio.com/"
   },
 
   "development": {
@@ -57,7 +59,8 @@
       "beaxy": "bxy"
     },
     "beaxyUrl": "https://uat-exchange.tokenexus.com",
-    "beaxyPrefix": "tokenexus.."
+    "beaxyPrefix": "tokenexus..",
+    "authUrl": "https://waiviodev.com/"
   },
 
   "test": {
@@ -77,6 +80,7 @@
       "beaxy": "bxy"
     },
     "beaxyUrl": "https://uat-exchange.tokenexus.com",
-    "beaxyPrefix": "tokenexus.."
+    "beaxyPrefix": "tokenexus..",
+    "authUrl": "https://test.waiviodev.com/"
   }
 }

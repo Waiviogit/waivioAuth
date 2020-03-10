@@ -1,5 +1,6 @@
 const { expect, sinon, dropDatabase, AuthenticationModule, ObjectID, crypto, OperationsHelper, Requests } = require( '../../../../testHelper' );
 const { UserFactory } = require( '../../../../factories' );
+const axios = require( 'axios' );
 
 describe( 'auth', async () => {
 
@@ -8,6 +9,7 @@ describe( 'auth', async () => {
 
         beforeEach( async () => {
             await dropDatabase();
+            sinon.stub( axios, 'post' ).returns( Promise.resolve( 'OK' ) );
             id = new ObjectID().toString();
             userName = 'name';
             alias = 'alias';
