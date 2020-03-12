@@ -39,7 +39,7 @@ const validateAuthToken = async ( req, res, next ) => {
                 if( !result ) return render.unauthorized( res );
                 return next( );
             }
-            if( doc._id ) await Sessions.removeAuthSession( { user_id: ObjectId( doc._id ), session: payload } );
+            if( doc._id ) await Sessions.removeAuthSession( { user_id: doc._id, session: payload } );
             return render.unauthorized( res );
         } );
 };
