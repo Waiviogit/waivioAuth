@@ -33,7 +33,8 @@ const hasSocialAccount = async ( req, res ) => {
 };
 
 const beaxySignIn = async ( req, res ) => {
-    const { validation_error, params } = validators.validate( req.body, validators.authentication.socialBeaxySchema );
+    const { validation_error, params } = validators.validate(
+        Object.assign( req.body, { nightMode: req.headers.nightmode } ), validators.authentication.socialBeaxySchema );
 
     if ( validation_error ) return render.error( res, validation_error );
     const { user, session, message, beaxyPayload } = await Strategies.beaxyStrategy( params, res );

@@ -9,8 +9,9 @@ require( '../../utilities/authentication/passport' )( passport );
 exports.socialStrategy = async( req, res, next ) => {
     const provider = req.route.path.match( /[a-z].*/ )[ 0 ];
     const userFields = await pickFields( { provider, req, res, next } );
+    const nightMode = _.get( req, 'headers.nightmode', false );
 
-    return await Auth.socialAuth( userFields );
+    return await Auth.socialAuth( Object.assign( userFields, { nightMode } ) );
 };
 
 const pickFields = async( { provider, req, res, next } ) => {
@@ -43,7 +44,7 @@ exports.beaxyStrategy = async ( params, res ) => {
                 if ( um_session ) {
                     res.setHeader( 'um_session', um_session.value );
                 }
-                const { user, session, message } = await Auth.socialAuth( userFields );
+                const { user, session, message } = await Auth.socialAuth( Object.assign( userFields, { nightMode: params.nightMode } ) );
                 return { user, session, beaxyPayload: result.data.payload, message };
             case 'TWO_FA_VERIFICATION_NEEDED' :
                 if( _.get( result, 'data.payload.token2fa' ) ) {

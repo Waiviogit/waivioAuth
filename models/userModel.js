@@ -16,14 +16,14 @@ const destroySession = async ( { user_id, session } ) => {
 };
 
 const findUserBySocial = async( { id, provider } ) => {
-    return await User.findOne( { 'auth.provider': provider, 'auth.id': id } );
+    return User.findOne( { 'auth.provider': provider, 'auth.id': id } );
 };
 
 const findUserByName = async( { name } ) => {
-    return await User.findOne( { name } );
+    return User.findOne( { name } );
 };
 
-const signUpSocial = async( { userName, alias, provider, avatar, id, session, postLocales } ) => {
+const signUpSocial = async( { userName, alias, provider, avatar, id, session, postLocales, nightMode } ) => {
     let metadata;
 
     if( avatar ) avatar = await Requests.uploadAvatar( { userName, imageUrl: avatar } );
@@ -40,6 +40,7 @@ const signUpSocial = async( { userName, alias, provider, avatar, id, session, po
     } );
 
     user.user_metadata.settings.postLocales = postLocales;
+    user.user_metadata.settings.nightmode = nightMode;
 
     try{
         await user.save();

@@ -17,6 +17,7 @@ exports.socialAuthShcema = Joi.object().keys( {
 
 exports.socialBeaxySchema = Joi.object().keys( {
     authBy: Joi.string().valid( 'credentials', '2fa' ).required(),
+    nightMode: Joi.boolean().default( false ),
     authData: Joi.when( 'authBy', {
         is: 'credentials',
         then: Joi.object().keys( {
@@ -37,6 +38,7 @@ exports.createUserSchema = Joi.object().keys( {
     alias: Joi.string().allow( '' ),
     postLocales: Joi.array().items( Joi.string().valid( ...LANGUAGES ) ).required(),
     id: Joi.string().required(),
+    nightMode: Joi.boolean().default( false ),
     provider: Joi.string().required(),
     session: Joi.object().keys( {
         sid: Joi.string().required(),
