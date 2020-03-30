@@ -7,7 +7,8 @@ const Strategies = require( './authStrategies' );
 const Beaxy = require( '../utilities/authentication/beaxy' );
 
 const socialSignIn = async ( req, res, next ) => {
-    const { validation_error } = validators.validate( req.body, validators.authentication.socialAuthShcema );
+    const { validation_error } = validators.validate(
+        Object.assign( req.body, { nightMode: req.headers.nightmode } ), validators.authentication.socialAuthShcema );
 
     if ( validation_error ) return render.error( res, validation_error );
     const { user, session, message } = await Strategies.socialStrategy( req, res, next );
