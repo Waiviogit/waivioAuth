@@ -15,8 +15,8 @@
       "investarena": "ia",
       "beaxy": "bxy"
     },
-    "beaxyUrl": "https://uat-exchange.tokenexus.com",
-    "beaxyPrefix": "tokenexus..",
+    "beaxyUrl": "https://exchange.beaxy.com",
+    "beaxyPrefix": "beaxy..",
     "authUrl": "https://waiviodev.com/"
   },
 
@@ -36,8 +36,8 @@
       "investarena": "ia",
       "beaxy": "bxy"
     },
-    "beaxyUrl": "https://uat-exchange.tokenexus.com",
-    "beaxyPrefix": "tokenexus..",
+    "beaxyUrl": "https://exchange.beaxy.com",
+    "beaxyPrefix": "beaxy..",
     "authUrl": "https://www.waivio.com/"
   },
 
@@ -58,8 +58,8 @@
       "investarena": "ia",
       "beaxy": "bxy"
     },
-    "beaxyUrl": "https://uat-exchange.tokenexus.com",
-    "beaxyPrefix": "tokenexus..",
+    "beaxyUrl": "https://exchange.beaxy.com",
+    "beaxyPrefix": "beaxy..",
     "authUrl": "https://waiviodev.com/"
   },
 
