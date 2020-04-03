@@ -23,12 +23,12 @@ const findUserByName = async( { name } ) => {
     return User.findOne( { name } );
 };
 
-const signUpSocial = async( { userName, alias, provider, avatar, id, session, postLocales, nightMode } ) => {
+const signUpSocial = async( { userName, alias, provider, avatar, id, session, postLocales, nightMode, email } ) => {
     let metadata;
 
     if( avatar ) avatar = await Requests.uploadAvatar( { userName, imageUrl: avatar } );
 
-    metadata = { profile: { name: alias, profile_image: avatar } };
+    metadata = { profile: { name: alias, profile_image: avatar, email } };
 
     const user = new User( {
         name: userName,

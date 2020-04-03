@@ -6,7 +6,7 @@ const {
 const { generateSession } = require( './sessions' );
 const { signUpRequest } = require( '../helpers/api/authRequest' );
 
-exports.socialAuth = async( { userName, alias, provider, avatar, id, postLocales, nightMode } ) => {
+exports.socialAuth = async( { userName, alias, provider, avatar, id, postLocales, nightMode, email } ) => {
     const userBySocial = await findUserBySocial( { id, provider } );
     const session = generateSession( );
 
@@ -14,9 +14,9 @@ exports.socialAuth = async( { userName, alias, provider, avatar, id, postLocales
         const userByName = await findUserByName( { name: userName } );
 
         if( userByName ) return { message: 'User exist' };
-        const { user, session: existSession, message } = await signUpSocial( { userName, alias, avatar, provider, id, session, postLocales, nightMode } );
+        const { user, session: existSession, message } = await signUpSocial( { userName, alias, avatar, provider, id, session, postLocales, nightMode, email } );
         if ( user && existSession ) {
-            signUpRequest( { userName, alias, provider, avatar, postLocales, id, session, nightMode } );
+            signUpRequest( { userName, alias, provider, avatar, postLocales, id, session, nightMode, email } );
             return{ user, session: existSession };
         }
         return { message };

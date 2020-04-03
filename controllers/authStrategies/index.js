@@ -20,6 +20,7 @@ const pickFields = async( { provider, req, res, next } ) => {
             if( !data || !data.fields ) return render.unauthorized( res, 'Invalid token' );
             const { userName, avatar, alias, locales } = req.body;
 
+            data.fields.email = req.body.allowEmail ? data.fields.email : null;
             data.fields.userName = userName;
             data.fields.avatar = avatar;
             data.fields.alias = alias ? alias : '';
