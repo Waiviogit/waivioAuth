@@ -315,7 +315,7 @@ describe( 'Authorization', async () => {
                     authData: {
                         user: faker.internet.email(),
                         token2fa: faker.getRandomString(),
-                        code: faker.random.number()
+                        code: faker.getRandomString(6)
                     }
                 };
                 sinon.stub( axios, 'post' ).returns( Promise.resolve( mock ) );

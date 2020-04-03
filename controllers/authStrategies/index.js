@@ -4,9 +4,8 @@ const render = require( '../../concerns/render' );
 const { Auth, Beaxy } = require( '../../utilities/authentication' );
 
 
-require( '../../utilities/authentication/passport' )( passport );
-
 exports.socialStrategy = async( req, res, next ) => {
+    require( '../../utilities/authentication/passport' )( passport );
     const provider = req.route.path.match( /[a-z].*/ )[ 0 ];
     const userFields = await pickFields( { provider, req, res, next } );
     const nightMode = _.get( req, 'headers.nightmode', false );
