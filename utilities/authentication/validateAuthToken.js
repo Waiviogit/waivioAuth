@@ -1,5 +1,5 @@
 const render = require( '../../concerns/render' );
-const { User } = require( '../../database' ).models;
+const { UserModel } = require( '../../models' );
 const Sessions = require( './sessions' );
 const ObjectId = require( 'mongodb' ).ObjectID;
 
@@ -9,18 +9,16 @@ const verifyAuthToken = async ( req, res, next ) => {
 
     if ( error ) return render.unauthorized( res, error );
 
-    await User.findById( ObjectId( payload.id ) ).lean().then(
-        async ( doc ) => {
-            session = Sessions.findSession( { sessions: doc && doc.auth && doc.auth.sessions, sid: payload.sid } );
-            if( session ) {
-                const { result } = Sessions.confirmAuthToken( { req, user: doc, session, decoded_token, secret_token: session.secret_token } );
-
-                if( !result ) return render.unauthorized( res );
-                return next();
-            }
-            await Sessions.removeAuthSession( { user_id: doc._id, session: payload } );
-            return render.unauthorized( res );
-        } );
+    const { user } = await UserModel.findUserById( ObjectId( payload.id ) );
+    if( !user ) return render.unauthorized( res, 'User not exist' );
+    session = Sessions.findSession( { sessions: user && user.auth && user.auth.sessions, sid: payload.sid } );
+    if( session ) {
+        const { result } = Sessions.confirmAuthToken( { req, user, session, decoded_token, secret_token: session.secret_token } );
+        if( !result ) return render.unauthorized( res );
+        return next();
+    }
+    await Sessions.removeAuthSession( { user_id: user._id, session: payload } );
+    return render.unauthorized( res );
 };
 
 const validateAuthToken = async ( req, res, next ) => {
@@ -29,19 +27,17 @@ const validateAuthToken = async ( req, res, next ) => {
 
     if ( error ) return render.unauthorized( res, error );
 
-    await User.findOne( { _id: ObjectId( payload.id ) } ).lean().then(
-        async ( doc ) => {
-            if( !doc ) return render.unauthorized( res, 'User not exist' );
-            session = Sessions.findSession( { sessions: doc.auth && doc.auth.sessions, sid: payload.sid } );
-            if( session ) {
-                const { result } = await Sessions.verifyToken( { decoded_token, session, doc, req, res } );
+    const { user } = await UserModel.findUserById( ObjectId( payload.id ) );
+    if( !user ) return render.unauthorized( res, 'User not exist' );
+    session = Sessions.findSession( { sessions: user.auth && user.auth.sessions, sid: payload.sid } );
+    if( session ) {
+        const { result } = await Sessions.verifyToken( { decoded_token, session, doc: user, req, res } );
 
-                if( !result ) return render.unauthorized( res );
-                return next( );
-            }
-            if( doc._id ) await Sessions.removeAuthSession( { user_id: doc._id, session: payload } );
-            return render.unauthorized( res );
-        } );
+        if( !result ) return render.unauthorized( res );
+        return next();
+    }
+    if( user._id ) await Sessions.removeAuthSession( { user_id: user._id, session: payload } );
+    return render.unauthorized( res );
 };
 
 module.exports = {

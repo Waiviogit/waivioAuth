@@ -19,6 +19,14 @@ const findUserBySocial = async( { id, provider } ) => {
     return User.findOne( { 'auth.provider': provider, 'auth.id': id } );
 };
 
+const findUserById = async ( id ) => {
+    try{
+        return { user: await User.findOne( { _id: id } ) };
+    }catch ( error ) {
+        return { error };
+    }
+};
+
 const findUserByName = async( { name } ) => {
     return User.findOne( { name } );
 };
@@ -86,5 +94,6 @@ module.exports = {
     findUserByName,
     findUserBySocial,
     destroyLastSession,
-    destroySession
+    destroySession,
+    findUserById
 };
