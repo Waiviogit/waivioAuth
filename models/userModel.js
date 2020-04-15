@@ -21,7 +21,7 @@ const findUserBySocial = async( { id, provider } ) => {
 
 const findUserById = async ( id ) => {
     try{
-        return { user: await User.findOne( { _id: id } ) };
+        return { user: await User.findOne( { _id: id } ).lean() };
     }catch ( error ) {
         return { error };
     }
