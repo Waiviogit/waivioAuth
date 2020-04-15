@@ -1,5 +1,5 @@
 module.exports = function( data ) {
     return {
-        user: _.omit( data.user, [ 'auth.sessions', 'auth.id' ] )
+        user: Object.assign( _.omit( data.user.auth, [ 'id', 'sessions' ] ), _.omit( data.user, [ 'auth' ] ) )
     };
 };
