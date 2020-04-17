@@ -32,15 +32,13 @@ const findUserByName = async( { name } ) => {
 };
 
 const signUpSocial = async( { userName, alias, provider, avatar, id, session, postLocales, nightMode, email } ) => {
-    let metadata;
-
     if( avatar ) avatar = await Requests.uploadAvatar( { userName, imageUrl: avatar } );
 
-    metadata = { profile: { name: alias, profile_image: avatar, email } };
-
+    const metadata = JSON.stringify( { profile: { name: alias, profile_image: avatar, email } } );
     const user = new User( {
         name: userName,
-        json_metadata: metadata ? JSON.stringify( metadata ) : '',
+        posting_json_metadata: metadata,
+        json_metadata: metadata,
         alias,
         'auth.sessions': [ session ],
         'auth.provider': provider,
@@ -56,7 +54,8 @@ const signUpSocial = async( { userName, alias, provider, avatar, id, session, po
         const { message } = await OperationsHelper.transportAction( userObjectCreate( {
             userId: user.name,
             displayName: alias ? alias : '',
-            json_metadata: metadata ? JSON.stringify( metadata ) : '',
+            posting_json_metadata: metadata,
+            json_metadata: metadata,
             access_token
         } ) );
 
@@ -78,8 +77,8 @@ const signInSocial = async( { user_id, session } ) => {
     return{ user: user, session };
 };
 
-const userObjectCreate = ( { userId, displayName, json_metadata, access_token } ) => {
-    return { params: { id: 'waivio_guest_create', json: { userId, displayName, json_metadata } }, access_token };
+const userObjectCreate = ( { userId, displayName, posting_json_metadata, access_token, json_metadata } ) => {
+    return { params: { id: 'waivio_guest_create', json: { userId, displayName, posting_json_metadata, json_metadata } }, access_token };
 };
 
 const prepareToken = ( { user, session } ) => {
