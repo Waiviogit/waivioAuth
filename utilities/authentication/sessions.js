@@ -1,9 +1,10 @@
 const jwt = require( 'jsonwebtoken' );
 const { ObjectID } = require( 'bson' );
 const crypto = require( 'crypto-js' );
-const { uuid } = require('uuidv4');
+const { uuid } = require( 'uuidv4' );
 const config = require( '../../config' );
 const { User } = require( '../../database' ).models;
+const moment = require( 'moment' );
 const { destroySession } = require( '../../models/userModel' );
 const TokenSalt = require( './tokenSalt' );
 const { encodeToken, decodeToken } = require( './tokenSalt' );
@@ -71,7 +72,7 @@ const verifyToken = async ( { decoded_token, session, doc, req, res } ) => {
         setAuthSession( { req, user: doc, session } );
         return { result: true };
     }catch( error ) {
-        if( error.message === 'jwt expired' ) {
+        if( error.message === 'jwt expired' && error.expiredAt > moment.utc().subtract( 1, 'hour' ) ) {
             await refreshSession( { res, req, doc, old_session: session } );
             return { result: true };
         }
