@@ -72,7 +72,7 @@ const verifyToken = async ( { decoded_token, session, doc, req, res } ) => {
         setAuthSession( { req, user: doc, session } );
         return { result: true };
     }catch( error ) {
-        if( error.message === 'jwt expired' && error.expiredAt > moment.utc().subtract( 1, 'hour' ) ) {
+        if( error.message === 'jwt expired' && error.expiredAt > moment.utc().subtract( 1, 'day' ) ) {
             await refreshSession( { res, req, doc, old_session: session } );
             return { result: true };
         }
