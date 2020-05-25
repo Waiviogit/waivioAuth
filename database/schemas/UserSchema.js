@@ -24,8 +24,8 @@ const UserMetadataSchema = new Schema( {
         rewriteLinks: { type: Boolean, default: false }, // change links from steemit.com to waivio.com
         showNSFWPosts: { type: Boolean, default: false }, // show or hide NSFW posts
         upvoteSetting: { type: Boolean, default: false }, // enable auto like on your posts
-        votePercent: { type: Number, min: 1, max: 10000, default: 5000 }, // default percent of your upvotes
-        votingPower: { type: Boolean, default: false } // dynamic toggle of vote power on each vote
+        votePercent: { type: Number, min: 1, max: 10000, default: 10000 }, // default percent of your upvotes
+        votingPower: { type: Boolean, default: true } // dynamic toggle of vote power on each vote
     },
     bookmarks: { type: [ String ], default: [] },
     drafts: {
