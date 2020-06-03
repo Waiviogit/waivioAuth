@@ -32,7 +32,7 @@ const findUserByName = async( { name } ) => {
 };
 
 const signUpSocial = async( { userName, alias, provider, avatar, id, session, postLocales, nightMode, email } ) => {
-    if( avatar ) avatar = await Requests.uploadAvatar( { userName, imageUrl: avatar } );
+    avatar ? avatar = await Requests.uploadAvatar( { userName, imageUrl: avatar } ) : avatar = 'https://waivio.nyc3.digitaloceanspaces.com/1591120767_bc441d85-3992-486c-8254-a09341a23003';
 
     const metadata = JSON.stringify( { profile: { name: alias, profile_image: avatar, email } } );
     const user = new User( {
