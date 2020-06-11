@@ -2,6 +2,7 @@ const Joi = require( '@hapi/joi' );
 const options = { allowUnknown: true, stripUnknown: true };
 
 exports.transportShcema = Joi.object().keys( {
+    guestReview: Joi.boolean(),
     id: Joi.string().valid(
         'waivio_guest_follow',
         'waivio_guest_follow_wobject',
