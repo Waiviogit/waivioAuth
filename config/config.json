@@ -7,7 +7,8 @@
     },
     "limit_sessions": 5,
     "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
-    "session_expiration": "10m",
+    "session_expiration": "4h",
+    "refresh_expiration": "7d",
     "waivioUrl": "https://www.waivio.com/",
     "appName": "waivio",
     "guestPrefixes": {
@@ -28,7 +29,8 @@
     },
     "limit_sessions": 5,
     "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
-    "session_expiration": "10m",
+    "session_expiration": "4h",
+    "refresh_expiration": "7d",
     "waivioUrl": "https://waiviodev.com/",
     "appName": "waivio",
     "guestPrefixes": {
@@ -49,7 +51,8 @@
     },
     "limit_sessions": 5,
     "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
-    "session_expiration": "1000",
+    "session_expiration": "4h",
+    "refresh_expiration": "7d",
     "waivioUrl": "http://localhost:3001/",
     "": "https://waiviodev.com/",
     "appName": "waivio",
@@ -72,6 +75,7 @@
     "limit_sessions": 5,
     "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
     "session_expiration": "2000",
+    "refresh_expiration": "2000",
     "waivioUrl": "https://test.waiviodev.com/",
     "appName": "waivio",
     "guestPrefixes": {

@@ -5,6 +5,8 @@ module.exports = {
             script: './bin/service.js',
             env: {
                 API_KEY: '49868f4a-9e89-4e3f-8b8a-0691730d42e0',
+                ACCESS_KEY: '6d6ca723-d621-4001-96ee-1978f552473f',
+                REFRESH_KEY: '3ff7606f-8247-44a8-a4ae-1349ae823373',
                 COMMON_VARIABLE: 'true',
                 PORT: '8004',
                 FACEBOOK_APP_ID: '754038848413420',

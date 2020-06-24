@@ -10,7 +10,7 @@ exports.socialStrategy = async( req, res, next ) => {
     const userFields = await pickFields( { provider, req, res, next } );
     const nightMode = _.get( req, 'headers.nightmode', false );
 
-    return await Auth.socialAuth( Object.assign( userFields, { nightMode } ) );
+    return Auth.socialAuth( Object.assign( userFields, { nightMode } ) );
 };
 
 const pickFields = async( { provider, req, res, next } ) => {

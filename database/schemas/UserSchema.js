@@ -6,10 +6,10 @@ const UserAuthSchema = new Schema(
     {
         id: { type: String },
         provider: { type: String },
-        sessions: [ {
-            sid: { type: String, required: true },
-            secret_token: { type: String, required: true }
-        } ]
+        // sessions: [ {
+        //     sid: { type: String, required: true },
+        //     secret_token: { type: String, required: true }
+        // } ]
     }, { _id: false }
 );
 

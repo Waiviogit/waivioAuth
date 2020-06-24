@@ -11,17 +11,21 @@ const socialSignIn = async ( req, res, next ) => {
         Object.assign( req.body, { nightMode: req.headers.nightmode } ), validators.authentication.socialAuthShcema );
 
     if ( validation_error ) return render.error( res, validation_error );
-    const { user, session, message } = await Strategies.socialStrategy( req, res, next );
+    const { user, message } = await Strategies.socialStrategy( req, res, next );
 
     if( message ) return render.unauthorized( res, message );
 
-    setAuthHeaders( res, user, session );
+    setAuthHeaders( res, user );
     return render.success( res, signInView( { user } ) );
 };
 
 const validateAuthToken = async( req, res ) => {
-    setAuthHeaders( res, req.auth.user, req.auth.session );
-    return render.success( res, validateAuthTokenView( { user: req.auth.user } ) );
+    return render.success( res, validateAuthTokenView( { user: req.user } ) );
+};
+
+const refreshAuthToken = async ( req, res ) => {
+    setAuthHeaders( res, req.user );
+    return render.success( res, { result: true } );
 };
 
 const hasSocialAccount = async ( req, res ) => {
@@ -68,6 +72,7 @@ const createUser = async ( req, res ) => {
 
 module.exports = {
     hasSocialAccount,
+    refreshAuthToken,
     socialSignIn,
     validateAuthToken,
     beaxySignIn,

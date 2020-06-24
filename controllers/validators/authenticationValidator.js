@@ -42,9 +42,5 @@ exports.createUserSchema = Joi.object().keys( {
     email: Joi.string().allow( null ).default( null ),
     id: Joi.string().required(),
     nightMode: Joi.boolean().default( false ),
-    provider: Joi.string().required(),
-    session: Joi.object().keys( {
-        sid: Joi.string().required(),
-        secret_token: Joi.string().required()
-    } )
+    provider: Joi.string().required()
 } );
