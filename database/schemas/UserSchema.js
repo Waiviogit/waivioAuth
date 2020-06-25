@@ -2,14 +2,28 @@ const mongoose = require( 'mongoose' );
 const Schema = mongoose.Schema;
 const { LANGUAGES } = require( '../../config/constants' );
 
+const UserNotificationsSchema = new Schema( {
+    account_witness_vote: { type: Boolean, default: true },
+    activateCampaign: { type: Boolean, default: true },
+    changePassword: { type: Boolean, default: true },
+    change_recovery_account: { type: Boolean, default: true },
+    comment: { type: Boolean, default: true },
+    custom_json: { type: Boolean, default: true },
+    fillOrder: { type: Boolean, default: true },
+    rejectUpdate: { type: Boolean, default: true },
+    restaurantStatus: { type: Boolean, default: true },
+    suspendedStatus: { type: Boolean, default: true },
+    transfer: { type: Boolean, default: true },
+    transfer_from_savings: { type: Boolean, default: true },
+    transfer_to_vesting: { type: Boolean, default: true },
+    withdraw_route: { type: Boolean, default: true },
+    withdraw_vesting: { type: Boolean, default: true }
+}, { _id: false } );
+
 const UserAuthSchema = new Schema(
     {
         id: { type: String },
-        provider: { type: String },
-        // sessions: [ {
-        //     sid: { type: String, required: true },
-        //     secret_token: { type: String, required: true }
-        // } ]
+        provider: { type: String }
     }, { _id: false }
 );
 
@@ -25,7 +39,8 @@ const UserMetadataSchema = new Schema( {
         showNSFWPosts: { type: Boolean, default: false }, // show or hide NSFW posts
         upvoteSetting: { type: Boolean, default: false }, // enable auto like on your posts
         votePercent: { type: Number, min: 1, max: 10000, default: 10000 }, // default percent of your upvotes
-        votingPower: { type: Boolean, default: true } // dynamic toggle of vote power on each vote
+        votingPower: { type: Boolean, default: true }, // dynamic toggle of vote power on each vote
+        userNotifications: { type: UserNotificationsSchema }
     },
     bookmarks: { type: [ String ], default: [] },
     drafts: {
