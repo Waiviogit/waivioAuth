@@ -243,11 +243,11 @@
         "produces": [
           "application/json"
         ],
-        "description": "Send access-token in headers. If token expired and valid, a new access token will respond. Auth headers are: 'access-token, expires-in, waivio-auth",
+        "description": "Send access-token in headers. Auth headers are: 'access-token, expires-in, waivio-auth",
         "parameters": [
           {
             "name": "access-token",
-            "in": "headers",
+            "in": "header",
             "description": "user access_token",
             "type": "string",
             "required": true
@@ -256,10 +256,39 @@
         "responses": {
           "200": {
             "description": "User data with auth headers",
-            "examples": {
-              "data": {
-                "user": "user data"
-              }
+            "schema": {
+              "$ref": "#/definitions/validateToken"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/refresh_auth_token": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "Send access-token in headers. Auth headers are: 'access-token, expires-in, waivio-auth",
+        "parameters": [
+          {
+            "name": "refresh-token",
+            "in": "header",
+            "description": "user refresh_token",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "result with auth headers",
+            "schema": {
+              "$ref": "#/definitions/refreshToken"
             }
           },
           "401": {
@@ -280,7 +309,7 @@
         "parameters": [
           {
             "name": "access-token",
-            "in": "headers",
+            "in": "header",
             "description": "user access_token",
             "type": "string",
             "required": true
@@ -290,7 +319,6 @@
             "in": "body",
             "description": "action type key",
             "type": "string",
-            "example": "waivio_guest_follow",
             "required": true
           },
           {
@@ -298,11 +326,6 @@
             "in": "body",
             "description": "data of request",
             "type": "string",
-            "example": {
-              "data": {
-                "some_key": "some_value"
-              }
-            },
             "required": true
           },
           {
@@ -343,7 +366,6 @@
             "in": "query",
             "description": "id of social account",
             "type": "string",
-            "example": "32545223563474356",
             "required": true
           },
           {
@@ -351,7 +373,7 @@
             "in": "query",
             "description": "user provider",
             "type": "string",
-            "example": "facebook",
+            "enum": ["facebook", "google"],
             "required": true
           }
         ],
@@ -369,6 +391,35 @@
     }
   },
   "definitions": {
+    "refreshToken": {
+      "type": "object",
+      "example": {
+        "result": true
+      }
+    },
+    "validateToken": {
+      "type": "object",
+      "example": {
+          "user": {
+            "provider": "google",
+            "_id": "5ef32cbdf01bb831a4c61725",
+            "objects_follow": [],
+            "users_follow": [],
+            "json_metadata": "{\"profile\":{\"name\":\"\",\"profile_image\":null,\"email\":null}}",
+            "posting_json_metadata": "{\"profile\":{\"name\":\"\",\"profile_image\":null,\"email\":null}}",
+            "wobjects_weight": 0,
+            "count_posts": 0,
+            "last_posts_count": 0,
+            "last_posts_counts_by_hours": [],
+            "followers_count": 0,
+            "name": "waivio_oleg",
+            "alias": "",
+            "createdAt": "2020-06-24T10:36:45.313Z",
+            "updatedAt": "2020-06-24T10:36:45.313Z",
+            "__v": 0
+          }
+        }
+    },
     "auth_beaxy": {
       "type": "object",
       "properties": {
