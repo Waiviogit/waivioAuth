@@ -71,7 +71,9 @@ const userObjectCreate = ( { userId, displayName, posting_json_metadata, access_
 const prepareToken = ( { user } ) => {
     return jwt.sign( { name: user.name, id: user._id }, process.env.ACCESS_KEY, { expiresIn: config.session_expiration } );
 };
+(async() => {
 
+})
 module.exports = {
     signUpSocial,
     signInSocial,
