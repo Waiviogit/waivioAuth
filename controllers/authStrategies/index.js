@@ -44,8 +44,8 @@ exports.beaxyStrategy = async ( params, res ) => {
                 if ( um_session ) {
                     res.setHeader( 'um_session', um_session.value );
                 }
-                const { user, session, message } = await Auth.socialAuth( Object.assign( userFields, { nightMode: params.nightMode } ) );
-                return { user, session, beaxyPayload: result.data.payload, message };
+                const { user, message } = await Auth.socialAuth( Object.assign( userFields, { nightMode: params.nightMode } ) );
+                return { user, beaxyPayload: result.data.payload, message };
             case 'TWO_FA_VERIFICATION_NEEDED' :
                 if( _.get( result, 'data.payload.token2fa' ) ) {
                     return render.success( res, result.data );
