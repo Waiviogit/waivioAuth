@@ -45,7 +45,7 @@ const beaxySignIn = async ( req, res ) => {
     const { user, message, beaxyPayload } = await Strategies.beaxyStrategy( params, res );
 
     if( message ) return render.unauthorized( res, message );
-    if( !user ) return render.unauthorized( res, message );;
+    if( !user ) return;
     setAuthHeaders( res, user );
     return render.success( res, beaxySignInView( { user, beaxyPayload } ) );
 };
