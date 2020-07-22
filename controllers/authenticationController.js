@@ -42,11 +42,11 @@ const beaxySignIn = async ( req, res ) => {
         Object.assign( req.body, { nightMode: req.headers.nightmode } ), validators.authentication.socialBeaxySchema );
 
     if ( validation_error ) return render.error( res, validation_error );
-    const { user, session, message, beaxyPayload } = await Strategies.beaxyStrategy( params, res );
+    const { user, message, beaxyPayload } = await Strategies.beaxyStrategy( params, res );
 
     if( message ) return render.unauthorized( res, message );
-    if( !session || !user )return;
-    setAuthHeaders( res, user, session );
+    if( !user ) return render.unauthorized( res, message );;
+    setAuthHeaders( res, user );
     return render.success( res, beaxySignInView( { user, beaxyPayload } ) );
 };
 

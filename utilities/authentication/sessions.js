@@ -3,8 +3,8 @@ const config = require( '../../config' );
 const moment = require( 'moment' );
 
 
-const setAuthHeaders = ( res, client, session ) => {
-    const { access_token, expires_in, refresh_token } = tokenSign( client, session );
+const setAuthHeaders = ( res, client ) => {
+    const { access_token, expires_in, refresh_token } = tokenSign( client );
 
     res.setHeader( 'access-token', access_token );
     res.setHeader( 'refresh-token', refresh_token );
