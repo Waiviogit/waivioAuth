@@ -1,6 +1,6 @@
 const Joi = require( '@hapi/joi' );
 const _ = require( 'lodash' );
-const { guestActions } = require( 'config/constants' );
+const { guestActions } = require( '../../config/constants' );
 const options = { allowUnknown: true, stripUnknown: true };
 
 exports.transportShcema = Joi.object().keys( {
