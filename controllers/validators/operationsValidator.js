@@ -1,17 +1,11 @@
 const Joi = require( '@hapi/joi' );
+const _ = require( 'lodash' );
+const { guestActions } = require( 'config/constants' );
 const options = { allowUnknown: true, stripUnknown: true };
 
 exports.transportShcema = Joi.object().keys( {
     guestReview: Joi.boolean(),
-    id: Joi.string().valid(
-        'waivio_guest_follow',
-        'waivio_guest_follow_wobject',
-        'waivio_guest_vote',
-        'waivio_guest_comment',
-        'waivio_guest_update',
-        'waivio_guest_reblog',
-        'waivio_guest_transfer',
-        'waivio_guest_account_update' ).required(),
+    id: Joi.string().valid( ..._.flattenDeep( Object.values( guestActions ) ) ).required(),
     data: Joi.object().required(),
     userName: Joi.string()
 } ).options( options );
