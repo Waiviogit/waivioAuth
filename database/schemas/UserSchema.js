@@ -1,8 +1,9 @@
 const mongoose = require( 'mongoose' );
 const Schema = mongoose.Schema;
 const { LANGUAGES } = require( '../../config/constants' );
+const { REFERRAL_TYPES, REFERRAL_STATUSES } = require( '../../constants/referralData' );
 
-const UserNotificationsSchema = new Schema({
+const UserNotificationsSchema = new Schema( {
     activationCampaign: { type: Boolean, default: true },
     follow: { type: Boolean, default: true },
     fillOrder: { type: Boolean, default: true },
@@ -19,15 +20,21 @@ const UserNotificationsSchema = new Schema({
     myLike: { type: Boolean, default: false },
     like: { type: Boolean, default: true },
     downvote: { type: Boolean, default: false },
-    claimReward: { type: Boolean, default: false },
-}, { _id: false });
+    claimReward: { type: Boolean, default: false }
+}, { _id: false } );
 
-const UserAuthSchema = new Schema(
-    {
-        id: { type: String },
-        provider: { type: String }
-    }, { _id: false }
+const UserAuthSchema = new Schema( {
+    id: { type: String },
+    provider: { type: String }
+}, { _id: false }
 );
+
+const ReferralsSchema = new Schema( {
+    agent: { type: String, index: true },
+    startedAt: { type: Date },
+    endedAt: { type: Date },
+    type: { type: String, enum: Object.values( REFERRAL_TYPES ) }
+}, { _id: false } );
 
 const UserMetadataSchema = new Schema( {
     notifications_last_timestamp: { type: Number, default: 0 },
@@ -76,7 +83,13 @@ const UserSchema = new Schema( {
     user_metadata: { type: UserMetadataSchema, default: () => ( {} ), select: false },
     privateEmail: { type: String, default: null, select: false },
     auth: { type: UserAuthSchema },
-    followers_count: { type: Number, default: 0 }
+    followers_count: { type: Number, default: 0 },
+    referralStatus: {
+        type: String,
+        enum: Object.values( REFERRAL_STATUSES ),
+        default: REFERRAL_STATUSES.NOT_ACTIVATED
+    },
+    referral: { type: [ ReferralsSchema ], default: [] }
 }, { timestamps: true } );
 
 UserSchema.index( { wobjects_weight: -1 } );
