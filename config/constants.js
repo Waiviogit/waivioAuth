@@ -52,7 +52,7 @@ exports.actionUrls = {
 };
 
 exports.guestActions = {
-    custom_json: [ 'waivio_guest_follow', 'waivio_guest_follow_wobject', 'waivio_guest_vote', 'waivio_guest_create', 'waivio_guest_reblog', 'waivio_guest_account_update', 'waivio_guest_bell' ],
+    custom_json: [ 'waivio_guest_follow', 'waivio_guest_follow_wobject', 'waivio_guest_vote', 'waivio_guest_create', 'waivio_guest_reblog', 'waivio_guest_account_update', 'waivio_guest_bell', 'overpayment_refund' ],
     comment: [ 'waivio_guest_comment' ],
     api: [ 'waivio_guest_update' ],
     transfer: [ 'waivio_guest_transfer' ]
