@@ -52,7 +52,21 @@ exports.actionUrls = {
 };
 
 exports.guestActions = {
-    custom_json: [ 'add_referral_agent', 'reject_referral_license', 'confirm_referral_license', 'waivio_guest_follow', 'waivio_guest_follow_wobject', 'waivio_guest_vote', 'waivio_guest_create', 'waivio_guest_reblog', 'waivio_guest_account_update', 'waivio_guest_bell', 'waivio_guest_wobj_rating', 'waivio_guest_hide_post' ],
+    custom_json: [
+      'add_referral_agent',
+      'reject_referral_license',
+      'confirm_referral_license',
+      'waivio_guest_follow',
+      'waivio_guest_follow_wobject',
+      'waivio_guest_vote',
+      'waivio_guest_create',
+      'waivio_guest_reblog',
+      'waivio_guest_account_update',
+      'waivio_guest_bell',
+      'waivio_guest_wobj_rating',
+      'waivio_guest_hide_post',
+      'waivio_guest_hide_comment'
+    ],
     comment: [ 'waivio_guest_comment' ],
     api: [ 'waivio_guest_update' ],
     transfer: [ 'waivio_guest_transfer', 'overpayment_refund' ]
