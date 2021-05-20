@@ -41,6 +41,7 @@ exports.LANGUAGES = [
     'ko-KR',
     'ja-JP',
     'zh-CN',
+    'af-ZA',
     'auto'
 ];
 
