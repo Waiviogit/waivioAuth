@@ -2,6 +2,7 @@ const mongoose = require( 'mongoose' );
 const Schema = mongoose.Schema;
 const { LANGUAGES } = require( '../../config/constants' );
 const { REFERRAL_TYPES, REFERRAL_STATUSES } = require( '../../constants/referralData' );
+const { SUPPORTED_CURRENCIES } = require( '../../constants/common' );
 
 const UserNotificationsSchema = new Schema( {
     activationCampaign: { type: Boolean, default: true },
@@ -49,7 +50,12 @@ const UserMetadataSchema = new Schema( {
         upvoteSetting: { type: Boolean, default: false }, // enable auto like on your posts
         votePercent: { type: Number, min: 1, max: 10000, default: 10000 }, // default percent of your upvotes
         votingPower: { type: Boolean, default: true }, // dynamic toggle of vote power on each vote
-        userNotifications: { type: UserNotificationsSchema }
+        userNotifications: { type: UserNotificationsSchema },
+        currency: {
+            type: String,
+            enum: Object.values( SUPPORTED_CURRENCIES ),
+            default: SUPPORTED_CURRENCIES.USD
+        }
     },
     bookmarks: { type: [ String ], default: [] },
     drafts: {
