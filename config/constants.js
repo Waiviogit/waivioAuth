@@ -52,6 +52,7 @@ exports.actionUrls = {
     api: { url: `${config.waivioUrl}api/:user_name/userMetadata`, type: 'put' },
     transfer: { url: `${config.waivioUrl}campaigns-api/guest/transfer`, type: 'post' },
     guestTransfer: { url: `${config.waivioUrl}objects-bot/guest-transfer`, type: 'post' },
+    guestWithdraw: { url: `${config.waivioUrl}objects-bot/guest-withdraw`, type: 'post' },
 };
 
 exports.guestActions = {
@@ -75,4 +76,5 @@ exports.guestActions = {
     api: [ 'waivio_guest_update' ],
     transfer: [ 'waivio_guest_transfer', 'overpayment_refund' ],
     guestTransfer: [ 'transferFromGuest' ],
+    guestWithdraw: [ 'guestWithdraw' ],
 };
