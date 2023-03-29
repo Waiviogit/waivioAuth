@@ -50,7 +50,9 @@ exports.actionUrls = {
     comment: { url: `${config.waivioUrl}objects-bot/guest-create-comment`, type: 'post' },
     delete_comment: { url: `${config.waivioUrl}objects-bot/guest-delete-comment`, type: 'post' },
     api: { url: `${config.waivioUrl}api/:user_name/userMetadata`, type: 'put' },
-    transfer: { url: `${config.waivioUrl}campaigns-api/guest/transfer`, type: 'post' }
+    transfer: { url: `${config.waivioUrl}campaigns-api/guest/transfer`, type: 'post' },
+    guestTransfer: { url: `${config.waivioUrl}objects-bot/guest-transfer`, type: 'post' },
+    guestWithdraw: { url: `${config.waivioUrl}objects-bot/guest-withdraw`, type: 'post' },
 };
 
 exports.guestActions = {
@@ -72,5 +74,7 @@ exports.guestActions = {
     comment: [ 'waivio_guest_comment' ],
     delete_comment: [ 'waivio_guest_delete_comment' ],
     api: [ 'waivio_guest_update' ],
-    transfer: [ 'waivio_guest_transfer', 'overpayment_refund' ]
+    transfer: [ 'waivio_guest_transfer', 'overpayment_refund' ],
+    guestTransfer: [ 'transferFromGuest' ],
+    guestWithdraw: [ 'guestWithdraw' ],
 };
