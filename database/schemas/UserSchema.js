@@ -99,6 +99,7 @@ const UserSchema = new Schema( {
 }, { timestamps: true } );
 
 UserSchema.index( { wobjects_weight: -1 } );
+UserSchema.index( { 'auth.id': 1 } );
 
 const UserModel = mongoose.model( 'User', UserSchema );
 
