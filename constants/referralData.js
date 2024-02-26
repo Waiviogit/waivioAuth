@@ -1,9 +1,9 @@
 exports.REFERRAL_TYPES = {
-    REVIEWS: 'reviews',
+  REVIEWS: 'reviews',
 };
 
 exports.REFERRAL_STATUSES = {
-    NOT_ACTIVATED: 'notActivated',
-    ACTIVATED: 'activated',
-    REJECTED: 'rejected',
+  NOT_ACTIVATED: 'notActivated',
+  ACTIVATED: 'activated',
+  REJECTED: 'rejected',
 };
