@@ -1,3 +1,3 @@
 module.exports = {
-    OperationsHelper: require( './operationsHelper' )
+  OperationsHelper: require('./operationsHelper'),
 };

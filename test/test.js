@@ -1,6 +1,6 @@
-const { Mongoose } = require( './testHelper' );
+const { Mongoose } = require('./testHelper');
 
-before( async () => {
-    process.env.NODE_ENV = 'test';
-    await Mongoose.connection.dropDatabase();
-} );
+before(async () => {
+  process.env.NODE_ENV = 'test';
+  await Mongoose.connection.dropDatabase();
+});

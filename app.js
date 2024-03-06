@@ -1,13 +1,15 @@
-const express = require( 'express' );
-const cors = require( 'cors' );
+const express = require('express');
+const cors = require('cors');
+
 const app = express();
 
-global._ = require( 'lodash' );
-app.use( cors( { exposedHeaders: [ 'access-token', 'expires-in', 'waivio-auth', 'um_session', 'api-key', 'nightmode', 'refresh-token' ] } ) );
-require( './enviroment.js' )( app, express );
-require( './auth.js' )( app );
-const routes = require( './routes' );
+global._ = require('lodash');
 
-app.use( '/', routes );
+app.use(cors({ exposedHeaders: ['access-token', 'expires-in', 'waivio-auth', 'um_session', 'api-key', 'nightmode', 'refresh-token'] }));
+require('./enviroment.js')(app, express);
+require('./auth.js')(app);
+const routes = require('./routes');
+
+app.use('/', routes);
 
 module.exports = app;
