@@ -33,7 +33,7 @@ const signUpSocial = async ({
 
   user.user_metadata.settings.postLocales = postLocales;
   user.user_metadata.settings.nightmode = nightMode;
-  user.user_metadata.settings.votingPower = true;
+  user.user_metadata.settings.votingPower = false;
 
   try {
     await user.save();
