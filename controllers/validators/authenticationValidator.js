@@ -10,7 +10,7 @@ exports.hasSocialShcema = Joi.object().keys({
 }).options(options);
 
 exports.socialAuthShcema = Joi.object().keys({
-  userName: Joi.string().pattern(new RegExp(`^(${config.guestPrefixes.waivio}|${config.guestPrefixes.investarena}|${config.guestPrefixes.beaxy})_[a-zA-Z0-9\.\-]{1,25}$`)),
+  userName: Joi.string().pattern(new RegExp(`^${config.guestPrefix}_[a-zA-Z0-9\.\-]{1,25}$`)),
   avatar: Joi.string().pattern(new RegExp('^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&\'\\(\\)\\*\\+,;=.]+$')).allow('').default(''),
   alias: Joi.string().allow(''),
   allowEmail: Joi.boolean().default(false),
@@ -36,7 +36,7 @@ exports.socialBeaxySchema = Joi.object().keys({
 });
 
 exports.createUserSchema = Joi.object().keys({
-  userName: Joi.string().pattern(new RegExp(`^(${config.guestPrefixes.waivio}|${config.guestPrefixes.investarena}|${config.guestPrefixes.beaxy})_[a-zA-Z0-9\.\-]{1,25}$`)),
+  userName: Joi.string().pattern(new RegExp(`^${config.guestPrefix}_[a-zA-Z0-9\.\-]{1,25}$`)),
   avatar: Joi.string().pattern(new RegExp('^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&\'\\(\\)\\*\\+,;=.]+$')).allow(null).default(''),
   alias: Joi.string().allow(''),
   postLocales: Joi.array().items(Joi.string().valid(...LANGUAGES)).required(),

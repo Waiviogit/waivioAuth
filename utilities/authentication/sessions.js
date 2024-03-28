@@ -21,8 +21,16 @@ const getAuthData = async ({ access_token }) => {
 const findSession = ({ sessions, sid }) => _.find(sessions, (hash) => hash.sid === sid);
 
 const tokenSign = (user) => {
-  const access_token = jwt.sign({ name: user.name, id: user._id }, process.env.ACCESS_KEY, { expiresIn: config.session_expiration });
-  const refresh_token = jwt.sign({ name: user.name, id: user._id }, process.env.REFRESH_KEY, { expiresIn: config.refresh_expiration });
+  const access_token = jwt.sign(
+    { name: user.name, id: user._id },
+    config.accessKey,
+    { expiresIn: config.session_expiration },
+  );
+  const refresh_token = jwt.sign(
+    { name: user.name, id: user._id },
+    config.refreshKey,
+    { expiresIn: config.refresh_expiration },
+  );
 
   return { access_token, expires_in: jwt.decode(access_token).exp, refresh_token };
 };
