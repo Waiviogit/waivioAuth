@@ -1,19 +1,21 @@
+const { ObjectId } = require('mongoose').Types;
 const render = require('../../concerns/render');
 const { UserModel } = require('../../models');
 const Sessions = require('./sessions');
-const { ObjectId } = require('mongoose').Types;
+const config = require('../../config');
 
 const verifyAuthToken = async (req, res, next) => {
   const accessToken = req.headers['access-token'];
 
   if (!accessToken) return render.unauthorized(res, 'Token not found');
-  const { payload, access_token, error } = await Sessions.getAuthData({ access_token: accessToken });
+  const { payload, access_token, error } = await Sessions
+    .getAuthData({ access_token: accessToken });
 
   if (error) return render.unauthorized(res, error);
 
   const { user } = await UserModel.findUserById(new ObjectId(payload.id));
   if (!user) return render.unauthorized(res, 'User not exist');
-  const { result } = Sessions.verifyToken({ access_token, secretKey: process.env.ACCESS_KEY });
+  const { result } = Sessions.verifyToken({ access_token, secretKey: config.accessKey });
   if (!result) return render.unauthorized(res);
   req.user = user;
   return next();
@@ -29,7 +31,10 @@ const refreshAccessToken = async (req, res, next) => {
   const { user } = await UserModel.findUserById(new ObjectId(payload.id));
   if (!user) return render.unauthorized(res, 'User not exist');
 
-  const { result } = Sessions.verifyToken({ access_token: refreshToken, secretKey: process.env.REFRESH_KEY });
+  const { result } = Sessions.verifyToken({
+    access_token: refreshToken,
+    secretKey: config.refreshKey,
+  });
   if (!result) return render.unauthorized(res);
   req.user = user;
   return next();

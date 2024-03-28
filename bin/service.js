@@ -7,12 +7,13 @@
 const app = require('../app');
 const debug = require('debug')('waivio-auth:server');
 const http = require('http');
+const config = require('../config');
 
 /**
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(process.env.PORT || '8004');
+const port = normalizePort(config.port);
 
 app.set('port', port);
 

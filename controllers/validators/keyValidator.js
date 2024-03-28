@@ -1,4 +1,3 @@
-exports.validate = (key) => {
-  const { API_KEY } = process.env;
-  return key === API_KEY;
-};
+const config = require('../../config');
+
+exports.validate = (key) => key === config.apiKey;

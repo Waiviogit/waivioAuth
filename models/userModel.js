@@ -71,7 +71,11 @@ const userObjectCreate = ({
   access_token,
 });
 
-const prepareToken = ({ user }) => jwt.sign({ name: user.name, id: user._id }, process.env.ACCESS_KEY, { expiresIn: config.session_expiration });
+const prepareToken = ({ user }) => jwt.sign(
+  { name: user.name, id: user._id },
+  config.accessKey,
+  { expiresIn: config.session_expiration },
+);
 
 module.exports = {
   signUpSocial,
