@@ -6,16 +6,10 @@
       "database": "waivio"
     },
     "limit_sessions": 5,
-    "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
     "session_expiration": "4h",
     "refresh_expiration": "7d",
     "waivioUrl": "https://www.waivio.com/",
     "appName": "waivio",
-    "guestPrefixes": {
-      "waivio": "waivio",
-      "investarena": "ia",
-      "beaxy": "bxy"
-    },
     "beaxyUrl": "https://exchange.beaxy.com",
     "beaxyPrefix": "beaxy..",
     "authUrl": "https://waiviodev.com/"
@@ -28,16 +22,10 @@
       "database": "waivio"
     },
     "limit_sessions": 5,
-    "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
     "session_expiration": "4h",
     "refresh_expiration": "7d",
     "waivioUrl": "https://waiviodev.com/",
     "appName": "waivio",
-    "guestPrefixes": {
-      "waivio": "waivio",
-      "investarena": "ia",
-      "beaxy": "bxy"
-    },
     "beaxyUrl": "https://uat-exchange.tokenexus.com",
     "beaxyPrefix": "tokenexus..",
     "authUrl": "https://www.waivio.com/"
@@ -50,17 +38,11 @@
       "database": "waivio"
     },
     "limit_sessions": 5,
-    "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
     "session_expiration": "4h",
     "refresh_expiration": "7d",
     "waivioUrl": "http://localhost:3001/",
     "": "https://waiviodev.com/",
     "appName": "waivio",
-    "guestPrefixes": {
-      "waivio": "waivio",
-      "investarena": "ia",
-      "beaxy": "bxy"
-    },
     "beaxyUrl": "https://uat-exchange.tokenexus.com",
     "beaxyPrefix": "tokenexus..",
     "authUrl": "https://waiviodev.com/"
@@ -73,16 +55,10 @@
       "database": "waiviotest"
     },
     "limit_sessions": 5,
-    "crypto_key": "ef293fdaf619a7d6a440815cd342a7ce",
     "session_expiration": "2000",
     "refresh_expiration": "2000",
     "waivioUrl": "https://test.waiviodev.com/",
     "appName": "waivio",
-    "guestPrefixes": {
-      "waivio": "waivio",
-      "investarena": "ia",
-      "beaxy": "bxy"
-    },
     "beaxyUrl": "https://uat-exchange.tokenexus.com",
     "beaxyPrefix": "tokenexus..",
     "authUrl": "https://test.waiviodev.com/"
