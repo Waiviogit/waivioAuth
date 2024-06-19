@@ -8,6 +8,7 @@ const transportAction = async ({ params, access_token }) => {
     type: requestData.type,
     params,
     access_token,
+    objectBotKey: process.env.OBJECT_BOT_ACCESS_KEY,
   });
 
   return { status, json, message };

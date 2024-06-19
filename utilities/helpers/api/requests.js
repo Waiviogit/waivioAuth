@@ -3,14 +3,16 @@ const FormData = require('form-data');
 const config = require('../../../config');
 
 const sendRequest = async ({
-  path, type, params, access_token,
-}) => await axios({
+  path, type, params, access_token, objectBotKey,
+}) => axios({
   baseURL: path,
   method: type,
   data: params,
   headers: {
     'access-token': access_token,
     'waivio-auth': true,
+    ...objectBotKey && { 'access-key': objectBotKey },
+
   },
 })
   .then((response) => getResponse({ response }))
