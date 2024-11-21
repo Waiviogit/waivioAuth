@@ -22,8 +22,8 @@
       "database": "waivio"
     },
     "limit_sessions": 5,
-    "session_expiration": 300,
-    "refresh_expiration": 600,
+    "session_expiration": "4h",
+    "refresh_expiration": "7d",
     "waivioUrl": "https://waiviodev.com/",
     "appName": "waivio",
     "beaxyUrl": "https://uat-exchange.tokenexus.com",
