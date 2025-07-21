@@ -40,7 +40,7 @@ const ReferralsSchema = new Schema({
 const UserMetadataSchema = new Schema({
   notifications_last_timestamp: { type: Number, default: 0 },
   settings: {
-    exitPageSetting: { type: Boolean, default: false }, // Enable this option to use the exit page when clicking on an external link.
+    exitPageSetting: { type: Boolean, default: true }, // Enable this option to use the exit page when clicking on an external link.
     locale: { type: String, enum: [...LANGUAGES], default: 'auto' }, // which language use on waivio
     postLocales: { type: [{ type: String, enum: [...LANGUAGES] }], default: [] }, // in which language do you want read posts
     nightmode: { type: Boolean, default: false }, // toggle nightmode on UI
