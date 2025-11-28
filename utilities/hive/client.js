@@ -1,4 +1,5 @@
-const { Client, Signature, crypto } = require('@hiveio/dhive');
+const { Client, Signature } = require('@hiveio/dhive');
+const crypto = require('crypto');
 const config = require('../../config');
 
 const hiveClient = new Client(config.hiveRpcNodes, {
@@ -39,9 +40,13 @@ const getAccount = async (username) => {
 
 const verifyPostingSignature = ({ nonce, signature, postingKeys }) => {
   try {
+    const digest = crypto.createHash('sha256')
+      .update(nonce, 'utf8')
+      .digest();
+
     const recoveredPubKey = Signature
       .fromString(signature)
-      .recover(crypto.sha256(nonce))
+      .recover(digest)
       .toString();
 
     return {
@@ -61,5 +66,3 @@ module.exports = {
   getAccount,
   verifyPostingSignature,
 };
-
-
