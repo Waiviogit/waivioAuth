@@ -7,6 +7,7 @@
     "test": "NODE_ENV=test nyc --reporter=html mocha"
   },
   "dependencies": {
+    "@hiveio/dhive": "^1.2.7",
     "@sentry/node": "^5.7.1",
     "axios": "^1.6.2",
     "body-parser": "1.19.0",
@@ -15,6 +16,7 @@
     "crypto-js": "3.1.9-1",
     "debug": "2.6.9",
     "express": "4.18.2",
+    "express-rate-limit": "^7.1.5",
     "express-session": "1.17.0",
     "form-data": "3.0.0",
     "http-errors": "1.6.3",

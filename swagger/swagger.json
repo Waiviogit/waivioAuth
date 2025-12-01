@@ -297,6 +297,152 @@
         }
       }
     },
+    "/hive/challenge": {
+      "get": {
+        "tags": [
+          "HiveAuth"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "Hive account requesting a nonce",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a one-time nonce",
+            "schema": {
+              "$ref": "#/definitions/hiveChallengeResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid username",
+            "schema": {
+              "$ref": "#/definitions/hiveError"
+            }
+          },
+          "5xx": {
+            "description": "Internal error",
+            "schema": {
+              "$ref": "#/definitions/hiveError"
+            }
+          }
+        }
+      }
+    },
+    "/login-keychain": {
+      "post": {
+        "tags": [
+          "HiveAuth"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Signature payload produced by Hive Keychain",
+            "schema": {
+              "$ref": "#/definitions/hiveLoginRequest"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JWT issued",
+            "schema": {
+              "$ref": "#/definitions/hiveLoginResponse"
+            }
+          },
+          "400": {
+            "description": "Nonce missing/expired/invalid signature format",
+            "schema": {
+              "$ref": "#/definitions/hiveError"
+            }
+          },
+          "403": {
+            "description": "Signature not authorized",
+            "schema": {
+              "$ref": "#/definitions/hiveError"
+            }
+          }
+        }
+      }
+    },
+    "/hive/me": {
+      "get": {
+        "tags": [
+          "HiveAuth"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer <jwt> issued by /login-keychain",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Decoded JWT payload",
+            "schema": {
+              "$ref": "#/definitions/hiveMeResponse"
+            }
+          },
+          "401": {
+            "description": "Token missing/invalid",
+            "schema": {
+              "$ref": "#/definitions/hiveError"
+            }
+          }
+        }
+      }
+    },
+    "/hive/metrics": {
+      "get": {
+        "tags": [
+          "HiveAuth"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "Optional API key if configured on the server",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Aggregated auth counters",
+            "schema": {
+              "$ref": "#/definitions/hiveMetricsResponse"
+            }
+          },
+          "403": {
+            "description": "Missing/invalid API key",
+            "schema": {
+              "$ref": "#/definitions/hiveError"
+            }
+          }
+        }
+      }
+    },
     "/guest_operations": {
       "post": {
         "tags": [
@@ -419,6 +565,85 @@
             "__v": 0
           }
         }
+    },
+    "hiveChallengeResponse": {
+      "type": "object",
+      "example": {
+        "nonce": "3ab4d0b54f3de4f3d86e9073d3698898b754bb8ff1337bd5223c54cb6a9c79a2",
+        "username": "someuser",
+        "expiresIn": 300
+      }
+    },
+    "hiveLoginRequest": {
+      "type": "object",
+      "required": [
+        "username",
+        "nonce",
+        "signature"
+      ],
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "nonce": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string",
+          "description": "Hex encoded signing result from Hive Keychain"
+        },
+        "publicKey": {
+          "type": "string",
+          "description": "Optional public key echo from Keychain (ignored by backend)"
+        }
+      }
+    },
+    "hiveLoginResponse": {
+      "type": "object",
+      "example": {
+        "token": "<jwt>",
+        "tokenType": "Bearer",
+        "expiresIn": 3600,
+        "expiresAt": 1731231231,
+        "username": "someuser",
+        "loginMethod": "hive_keychain"
+      }
+    },
+    "hiveMeResponse": {
+      "type": "object",
+      "example": {
+        "username": "someuser",
+        "loginMethod": "hive_keychain",
+        "exp": 1731231231,
+        "iat": 1731227631
+      }
+    },
+    "hiveMetricsResponse": {
+      "type": "object",
+      "example": {
+        "challenge": {
+          "total": 10,
+          "success": 9,
+          "failures": {
+            "invalid_username": 1
+          }
+        },
+        "login": {
+          "total": 6,
+          "success": 4,
+          "failures": {
+            "invalid_nonce": 1,
+            "signature_not_authorized": 1
+          }
+        }
+      }
+    },
+    "hiveError": {
+      "type": "object",
+      "example": {
+        "error": "invalid_nonce",
+        "message": "Nonce not found"
+      }
     },
     "auth_beaxy": {
       "type": "object",

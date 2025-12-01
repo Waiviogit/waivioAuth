@@ -13,5 +13,6 @@ module.exports = {
   Mongoose: mongoose,
   models: {
     User: require('./schemas/UserSchema'),
+    HiveNonce: require('./schemas/HiveNonceSchema'),
   },
 };
